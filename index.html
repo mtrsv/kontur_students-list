@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+    <title>Список студентов</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="styles/style.css"/>
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+
+    <script src="scripts/ajax-utils.js"></script>
+    <script src="scripts/jquery-2.1.4.min.js"></script>
+    <script src="scripts/jquery.pickmeup.js"></script>
+    <script src="scripts/script.js"></script>
+</head>
+<body>
+<div class="main-container">
+
+    <header class="page-header">
+        <span class="page-header__title">Список студентов</span>
+        <span class="page-header__group-name">МТ-202</span>
+        <button class="page-header__print-button button button_print">Распечатать</button>
+    </header>
+
+    <div class="group-list">
+
+        <div class="list-header">
+            <a class="list-header__link link" href="#">Вернуться к списку групп</a>
+            <span id="full-name" class="list-header__title">Константинопольский Константин Константинович</span>
+        </div>
+
+        <div class="name-list">
+            <button class="name-list__button button button_add">Добавить студента</button>
+            <button class="name-list__button button button_save" title="Сохранить изменения">Сохранить изменения</button>
+
+            <div class="name-list__name_current">
+                <span id="current-name" class="name-list__name" href="#">Константинопольский Константин Константинович</span>
+            </div>
+
+            <div id="name-list-container">
+                <!--dynamically generated namelist here-->
+            </div>
+
+
+            <article class="person-data">
+                <form id="data-container">
+                    <span class="person-data__title">Стандартные личные данные</span>
+                    <span id="delete-student" class="person-data__link link">Удалить</span>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Фамилия</span>
+                        <input id="last-name" class="form-item__input" type="text" size="40">
+                    </div>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Имя</span>
+                        <input id="first-name" class="form-item__input" type="text" size="40">
+                    </div>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Отчество</span>
+                        <input id="second-name" class="form-item__input" type="text" size="40">
+                    </div>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Пол</span>
+
+                        <input type="radio" class="radio form-item__input" id="radio-gender_male" name="radio_gender">
+                        <label for="radio-gender_male">Mужской</label>
+
+                        <input type="radio" class="radio form-item__input" id="radio-gender_female" name="radio_gender">
+                        <label for="radio-gender_female">Женский</label>
+                    </div>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Дата рождения</span>
+                        <span class="datepicker">
+                            <input id="birth-date" class="form-item__input input_calendar" type="text" size="40">
+                            <div class="button button_calendar"></div>
+                        </span>
+                    </div>
+
+                    <div class="form-item">
+                        <span class="form-item__tittle">Дата поступления</span>
+                        <span class="datepicker">
+                            <input id="enter-date" class="form-item__input input_calendar" type="text" size="40">
+                           <div class="button button_calendar"></div>
+                        </span>
+
+                        <div class="calendar-container">
+
+                        </div>
+
+
+                    </div>
+
+                    <hr class="kontur-hr person-data__hr">
+
+                    <span class="person-data__title">Списочек посещаемых предметов</span>
+                    <span id="add-subject" class="person-data__link link">Добавить предмет</span>
+
+                    <div id="subject-list-container" class="subject-list">
+                        <!--dynamically generated subject list here-->
+                    </div>
+
+                    <div class="linechart">
+
+                        <div class="linechart-header">
+                            <div id="header-numbers" class="row">
+                                <span class="left">0</span>
+                                <span class="center">
+                                    <span class="center-number">50</span>
+                                </span>
+                                <span class="right">100</span>
+                            </div>
+                            <div class="row">
+                                <div class="halfcell">
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                </div>
+                                <div class="halfcell">
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                    <div class="onefifth-cell"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="linechart-container" class="linechart-body">
+                            <!--dynamically generated linechart here-->
+                        </div>
+
+                    </div>
+
+                    <div class="donutchart">
+                        <canvas id="donut-chart-canvas" width="360" height="360">
+                            <!--dynamically generated donutchart here-->
+                        </canvas>
+                    </div>
+
+                </form>
+            </article>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>
