@@ -1,3 +1,6 @@
+// Ilia Matrosov
+// 2016
+
 (function(global){
     "use strict";
 
