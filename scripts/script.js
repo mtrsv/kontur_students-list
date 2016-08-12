@@ -435,13 +435,13 @@
         newSubjectView = insertProperty(newSubjectView,"subjectNumber",index);
         newSubjectView = insertProperty(newSubjectView,"indexNumber",index);
 
-        subjects.lastChild.insertAdjacentHTML("afterend", newSubjectView);
+        subjects.children[subjects.children.length-1].insertAdjacentHTML("afterend", newSubjectView);
 
 
         var linechart = document.getElementById("linechart-container");
         var newSubjectBarView = makeBar(name, index);
 
-        linechart.lastChild.insertAdjacentHTML("afterend", newSubjectBarView);
+        linechart.children[linechart.children.length-1].insertAdjacentHTML("afterend", newSubjectBarView);
 
 
         updateLinechartArrays();
