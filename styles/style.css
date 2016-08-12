@@ -32,6 +32,7 @@ body {
   /* IE6-9 */ }
 
 .button.button_save {
+  position: relative;
   background: #009bfe;
   /* Old browsers */
   background: -moz-linear-gradient(top, #009bfe 0%, #007ecf 100%);
@@ -43,8 +44,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
   /* IE6-9 */
   color: black;
-  text-shadow: none;
-  position: relative; }
+  text-shadow: none; }
 
 .button.button_save::after {
   position: absolute;
@@ -97,6 +97,10 @@ body {
   width: 11px;
   height: 12px;
   display: inline-block; }
+
+.button-disabled {
+  background-color: lightgrey;
+  color: #404040; }
 
 /* radio button*/
 .radio {

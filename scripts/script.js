@@ -3,10 +3,10 @@
 
     document.addEventListener("DOMContentLoaded", onDomLoad);
     
-    var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению";
-    
-    var studentsListUrl = "../studentsList.json",
-        barArray = [],
+    var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению",
+        STUDENT_LIST_URL = "../studentsList.json";
+
+    var barArray = [],
         radioArray =[],
         studentsArray,
         subjectHtml,
@@ -16,7 +16,7 @@
 
 
     function onDomLoad(){
-        $ajaxUtils.sendGetRequest(studentsListUrl,
+        $ajaxUtils.sendGetRequest(STUDENT_LIST_URL,
                         function(parsedObject){
                             studentsArray = parsedObject.students;
                             convertDate(studentsArray);
@@ -70,11 +70,11 @@
         }
     }
 
-
     function onListContainerClick(event){
         if (event.target.classList.contains("name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
             fillFormFields(currentStudentIndex);
+            validateAllFields();
         }
     }
 
@@ -312,7 +312,6 @@
         context.fillText(lessonsSkippedFair, startPointX, startPointY + 80);
     }
 
-
     function convertDate(studentsArray){
         for (var i=0; i < studentsArray.length; i++) {
             studentsArray[i].birthDate = new Date(Date.parse(studentsArray[i].birthDate));
@@ -335,6 +334,18 @@
     function validateField(target){
         if (target.value == ""){
             showError(target,VALIDATION_ERROR_MESSAGE);
+        } else {
+            resetError(target);
+        }
+    }
+
+    function validateAllFields() {
+        var textFields = document.querySelectorAll(".form-item__input");
+        console.dir(textFields);
+
+        for (var i=0; i < textFields.length; i++) {
+            if (event.target.classList.contains("input_calendar")) continue;
+            validateField(textFields[i]);
         }
     }
 

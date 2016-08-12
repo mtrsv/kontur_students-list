@@ -37,17 +37,13 @@ body{
     white-space: nowrap;
 
     @include button-gradient(#fdfdfd, #dfdfdf);
-
-
 }
 
 .button.button_save{
+    position: relative;
     @include button-gradient(#009bfe, #007ecf);
-
     color: black;
     text-shadow: none;
-
-    position: relative;
 }
 
 .button.button_save::after {
@@ -109,6 +105,10 @@ body{
     display: inline-block;
 }
 
+.button-disabled{
+    background-color: lightgrey;
+    color: #404040;
+}
 
 /* radio button*/
 .radio {
