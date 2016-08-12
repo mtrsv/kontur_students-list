@@ -1,4 +1,4 @@
-(function(namespace){
+(function(global){
     "use strict";
 
     document.addEventListener("DOMContentLoaded", onDomLoad);
@@ -12,10 +12,8 @@
     var subjectHtmlUrl = "../snippets/subject.html";
     var linechartBarHtmlUrl = "../snippets/linechart-bar.html";
     var nameListNameHtmlUrl = "../snippets/name-list__name.html";
-    var calendarHtmlUrl = "../snippets/calendar.html";
 
     var studentsArray,
-        calendarHtml,
         subjectHtml,
         linechartBarHtml,
         nameListNameHtml;
@@ -47,11 +45,6 @@
                             checkSnippetsLoaded();
                         },false);
 
-        $ajaxUtils.sendGetRequest(calendarHtmlUrl,
-                        function(response){
-                            calendarHtml = response;
-                            checkSnippetsLoaded();
-                        },false);
     }
 
     function checkSnippetsLoaded(){
@@ -59,7 +52,6 @@
         if (!subjectHtml) return;
         if (!linechartBarHtml) return;
         if (!nameListNameHtml) return;
-        if (!calendarHtml) return;
 
         onDataLoad();
     }
