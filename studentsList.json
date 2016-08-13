@@ -4,8 +4,8 @@
     "secondName": "Иванович",
     "lastName": "Иванов",
     "gender": "male",
-    "birthDate": "1993-08-15",
-    "enterDate": "2010-07-21",
+    "birthDate": "1993.08.15",
+    "enterDate": "2010.07.21",
     "subjects": ["First", "Second","Third","Another","Add some more","Ok","One more"],
     "lessonsSkipped": 82,
     "lessonsSkippedFair": 20
@@ -14,8 +14,8 @@
     "secondName": "Ивановна",
     "lastName": "Иванова",
     "gender": "female",
-    "birthDate": "1993-12-19",
-    "enterDate": "2010-07-15",
+    "birthDate": "1993.12.19",
+    "enterDate": "2010.07.15",
     "subjects": ["First", "Second"],
     "lessonsSkipped": 12,
     "lessonsSkippedFair": 1
@@ -24,8 +24,8 @@
     "secondName": "Юрьевич",
     "lastName": "Коровьев",
     "gender": "male",
-    "birthDate": "1992-01-05",
-    "enterDate": "2010-08-01",
+    "birthDate": "1992.01.05",
+    "enterDate": "2010.08.01",
     "subjects": ["First", "Second","Third","1234567890123456789012345","5 Another","6 Another","7 ---==-"],
     "lessonsSkipped": 55,
     "lessonsSkippedFair": 12
@@ -34,8 +34,8 @@
     "secondName": "Сергеевич",
     "lastName": "Пушкин",
     "gender": "male",
-    "birthDate": "1799-06-06",
-    "enterDate": "1811-09-01",
+    "birthDate": "1799.06.06",
+    "enterDate": "1811.09.01",
     "subjects": ["Великорусский язык", "Великорусская литература"],
     "lessonsSkipped": 55,
     "lessonsSkippedFair": 12

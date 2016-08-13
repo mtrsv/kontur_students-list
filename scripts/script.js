@@ -12,6 +12,7 @@
     var barArray = [],
         radioArray =[],
         studentsArray,
+        unsavedStudentsArray = [],
         subjectHtml,
         linechartBarHtml,
         nameListNameHtml,
@@ -47,10 +48,12 @@
         document.getElementById("delete-student").addEventListener("click", deleteStudent);
         document.getElementById("add-subject").addEventListener("click", addSubject);
         document.getElementById("add-student").addEventListener("click", addStudent);
-        document.getElementById("save-student").addEventListener("click", saveStudent);
+        document.getElementById("save-student").addEventListener("click", saveStudent.bind(this));
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
+        // document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
+        document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this));
     }
 
     function initPickmeup(){
@@ -77,6 +80,7 @@
 
     function onListContainerClick(event){
         if (event.target.classList.contains("name-list__name")){
+            temporarySaveChanges();
             currentStudentIndex = event.target.dataset.indexNumber;
             fillFormFields(currentStudentIndex);
             validateAllFields();
@@ -90,6 +94,8 @@
     function saveStudent(e) {
         if (e.target.closest(".button-disabled")) return;
         console.log("save");
+        temporarySaveChanges();
+        saveChanges();
     }
 
     function onListInputBlur(event){
@@ -138,6 +144,8 @@
         addSubjectsView(studentData);
         insertHtml("name-list-container",nameListView);
         drawDonutChart(studentData.lessonsSkipped,studentData.lessonsSkippedFair);
+
+        checkSaveButtonState();
     }
 
     function addSubjectsView(studentData) {
@@ -149,7 +157,6 @@
         updateLinechartArrays();
         redrawLinechart();
     }
-
 
     function makeSubjectsView(subjectArray){
         var subjectViews = [];
@@ -232,6 +239,7 @@
                 break;
             case "radio":
                 field.checked = value;
+                break;
         }
 
         // console.dir(field);
@@ -423,7 +431,7 @@
 
         for (var key in studentObj){
             emptyObj[key] = {}
-            console.log(key + " " + typeof studentObj[key]);
+            //console.log(key + " " + typeof studentObj[key]);
             switch (typeof studentObj[key]){
                 case "string":
                     emptyObj[key] = "";
@@ -432,7 +440,7 @@
 
         }
 
-        console.dir(emptyObj);
+        // /console.dir(emptyObj);
     }
 
     function addSubject(){
@@ -461,6 +469,67 @@
         updateLinechartArrays();
         redrawLinechart();
     }
+
+    function temporarySaveChanges(){
+        var form = document.forms["data-container"],
+            newStudentData = {};
+
+        newStudentData.lastName = getFieldData("last-name");
+        newStudentData.firstName = getFieldData("first-name");
+        newStudentData.secondName = getFieldData("second-name");
+        newStudentData.birthDate = getFieldData("birth-date");
+        newStudentData.enterDate = getFieldData("enter-date");
+        newStudentData.gender = getFieldData("radio_gender","radio");
+
+        unsavedStudentsArray[currentStudentIndex] = newStudentData;
+        //console.dir(newStudentData);
+        checkSaveButtonState();
+
+        function getFieldData(fieldName,type) {
+            var field = document.getElementById(fieldName),
+                type = type || "input",
+                result = "";
+
+            switch (type){
+                case "input":
+                    if (!field) return;
+                    result = field.value;
+                    break;
+
+                case "radio":
+                    if (!form[fieldName]) return;
+                    result = form[fieldName].value;
+                    break;
+            }
+
+            return result;
+
+            // console.dir(field);
+        }
+    }
+
+    function saveChanges(){
+        var changedStudent = unsavedStudentsArray[currentStudentIndex];
+        if (!changedStudent) return;
+
+        changedStudent.subjects = studentsArray[currentStudentIndex].subjects;
+        changedStudent.lessonsSkipped = studentsArray[currentStudentIndex].lessonsSkipped;
+        changedStudent.lessonsSkippedFair = studentsArray[currentStudentIndex].lessonsSkippedFair;
+
+        studentsArray[currentStudentIndex] = changedStudent;
+        unsavedStudentsArray[currentStudentIndex] = null;
+        checkSaveButtonState();
+    }
+
+    function checkSaveButtonState(){
+        console.log("check")
+        if (unsavedStudentsArray[currentStudentIndex]){
+            document.getElementById("save-student").classList.remove("button-disabled");
+        } else {
+            document.getElementById("save-student").classList.add("button-disabled");
+        }
+    }
+
 
 
 }(window));
