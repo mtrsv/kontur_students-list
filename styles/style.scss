@@ -36,7 +36,8 @@ $sprites: url("../images/sprites.png");
   @include button-gradient(#fdfdfd, #dfdfdf);
 }
 
-.button.button_save {
+.button_save {
+  padding: 5px 5px 7px;
   position: relative;
   @include button-gradient(#009bfe, #007ecf);
   color: black;
@@ -44,17 +45,17 @@ $sprites: url("../images/sprites.png");
   margin-bottom: 25px;
 }
 
-.button.button_save::after {
+.button_save::after {
   position: absolute;
   content: attr(title);
-  padding: 8px 15px;
+  padding: 0px 15px;
   color: rgba(255, 255, 255, .99);
-  top: -1px;
+  top: 6px;
   left: 9px;
   white-space: nowrap;
 }
 
-.button.button_save:before {
+.button_save:before {
   content: '';
   background-image: $sprites;
   background-repeat: no-repeat;
@@ -69,10 +70,10 @@ $sprites: url("../images/sprites.png");
   display: inline-block;
 }
 
-.button.button_print{
+.button_print{
   width: 120px;
 }
-.button.button_print:before {
+.button_print:before {
   content: '';
   background-image: $sprites;
   background-repeat: no-repeat;
@@ -301,10 +302,8 @@ body {
 }
 
 .page-header__print-button {
-  float: right;
   position: absolute;
   right: 20px;
-
 }
 
 .group-list {

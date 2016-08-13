@@ -82,7 +82,8 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */ }
 
-.button.button_save {
+.button_save {
+  padding: 5px 5px 7px;
   position: relative;
   background: #009bfe;
   /* Old browsers */
@@ -98,16 +99,16 @@ html {
   text-shadow: none;
   margin-bottom: 25px; }
 
-.button.button_save::after {
+.button_save::after {
   position: absolute;
   content: attr(title);
-  padding: 8px 15px;
+  padding: 0px 15px;
   color: rgba(255, 255, 255, 0.99);
-  top: -1px;
+  top: 6px;
   left: 9px;
   white-space: nowrap; }
 
-.button.button_save:before {
+.button_save:before {
   content: '';
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
@@ -121,10 +122,10 @@ html {
   height: 12px;
   display: inline-block; }
 
-.button.button_print {
+.button_print {
   width: 120px; }
 
-.button.button_print:before {
+.button_print:before {
   content: '';
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
@@ -335,7 +336,6 @@ body {
   content: ""; }
 
 .page-header__print-button {
-  float: right;
   position: absolute;
   right: 20px; }
 
