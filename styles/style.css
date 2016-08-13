@@ -1,25 +1,76 @@
-/**
- * @author		Ilia Matrosov
- */
-* {
-  box-sizing: border-box;
-  font-family: 'PT Sans', sans-serif; }
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+  display: block; }
 
 body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+/* Don't kill focus outline for keyboard users: http://24ways.org/2009/dont-lose-your-focus */
+a:hover, a:active {
+  outline: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+html {
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+.main-container {
+  box-sizing: border-box;
   font-family: 'PT Sans', sans-serif;
   font-size: 14px; }
 
+/* controls */
 .button {
   border: 1px solid #d9d9d9;
   border-bottom: 1px solid #ababab;
-  border-radius: 3px;
-  padding: 8px 12px;
+  border-radius: 4px;
+  padding: 6px 5px;
   font-size: 14px;
   color: black;
   margin: 8px;
   margin-top: 0;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
   white-space: nowrap;
+  font-family: 'PT Sans', sans-serif;
   background: #fdfdfd;
   /* Old browsers */
   background: -moz-linear-gradient(top, #fdfdfd 0%, #dfdfdf 100%);
@@ -28,10 +79,11 @@ body {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #fdfdfd 0%, #dfdfdf 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */ }
 
 .button.button_save {
+  position: relative;
   background: #009bfe;
   /* Old browsers */
   background: -moz-linear-gradient(top, #009bfe 0%, #007ecf 100%);
@@ -40,19 +92,19 @@ body {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #009bfe 0%, #007ecf 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */
   color: black;
   text-shadow: none;
-  position: relative; }
+  margin-bottom: 25px; }
 
 .button.button_save::after {
   position: absolute;
   content: attr(title);
   padding: 8px 15px;
   color: rgba(255, 255, 255, 0.99);
-  top: 1px;
-  left: 14px;
+  top: -1px;
+  left: 9px;
   white-space: nowrap; }
 
 .button.button_save:before {
@@ -60,13 +112,17 @@ body {
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
   background-position: 0px -14px;
-  margin-right: 8px;
+  margin-right: 10px;
   margin-left: -5px;
   position: relative;
   top: 0px;
+  left: 6px;
   width: 14px;
   height: 12px;
   display: inline-block; }
+
+.button.button_print {
+  width: 120px; }
 
 .button.button_print:before {
   content: '';
@@ -89,14 +145,18 @@ body {
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
   background-position: -16px -16px;
-  margin-right: 8px;
+  margin-right: 10px;
   margin-left: -2px;
   position: relative;
   top: 2px;
-  left: -2px;
+  left: 4px;
   width: 11px;
   height: 12px;
   display: inline-block; }
+
+.button-disabled {
+  background-color: lightgrey;
+  color: #404040; }
 
 /* radio button*/
 .radio {
@@ -136,7 +196,7 @@ body {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #fdfdfd 0%, #dfdfdf 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */ }
 
 .radio:not(checked) + label::after {
@@ -193,7 +253,7 @@ body {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #fdfdfd 0%, #dfdfdf 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */ }
 
 .kontur-checkbox:not(checked) + label::after {
@@ -215,6 +275,7 @@ body {
   opacity: 1; }
 
 /* end checkbox */
+/* end controls */
 .link {
   color: #3072c4;
   text-decoration: underline;
@@ -224,9 +285,8 @@ body {
   background-image: url("../images/main_background.png"); }
 
 .main-container {
-  box-sizing: content-box;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 0 0 0;
   max-width: 980px; }
 
 .list-header__title {
@@ -245,7 +305,8 @@ body {
 
 .page-header {
   position: relative;
-  margin-bottom: 12px; }
+  margin-bottom: 15px;
+  width: 100%; }
 
 .page-header__title {
   font-size: 28px;
@@ -292,7 +353,7 @@ body {
   background: -o-linear-gradient(top, white 0%, #f1f1f1 50%, white 100%);
   background: -ms-linear-gradient(top, white 0%, #f1f1f1 50%, white 100%);
   background: linear-gradient(to bottom, white 0%, #f1f1f1 50%, white 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
   padding: 16px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2); }
 
@@ -302,7 +363,7 @@ body {
 
 .name-list__button {
   display: inline-block;
-  width: 95%;
+  width: 170px;
   text-align: left;
   margin-left: 0;
   margin-right: 0;
@@ -321,12 +382,12 @@ body {
 
 .name-list__name_current {
   float: left;
-  width: 201px;
+  width: 186px;
   border: 1px solid #d4d4d4;
   border-right: 1px solid white;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 6px 0px;
+  padding: 8px 0px;
   /*margin-left: -10px;*/
   z-index: 10;
   background-color: white;
@@ -345,7 +406,7 @@ body {
 
 .person-data {
   width: 750px;
-  margin-left: 200px;
+  margin-left: 185px;
   border: 1px solid #d4d4d4;
   border-radius: 2px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
@@ -359,7 +420,7 @@ body {
 .person-data__title {
   font-size: 20px;
   /*font-weight: bold;*/
-  margin-bottom: 26px;
+  margin-bottom: 30px;
   display: inline-block; }
 
 .person-data__link {
@@ -377,7 +438,7 @@ body {
   margin-bottom: 36px; }
 
 .form-item {
-  margin-bottom: 10px; }
+  margin-bottom: 15px; }
 
 .form-item__tittle {
   width: 130px;
@@ -438,8 +499,8 @@ body {
   margin-right: 8px;
   margin-left: -9px;
   position: relative;
-  top: -2px;
-  left: 2px;
+  top: 0px;
+  left: 9px;
   width: 14px;
   height: 15px;
   display: inline-block; }
@@ -580,7 +641,7 @@ body {
 .subject-list__subject {
   width: 220px;
   display: inline-block;
-  margin-bottom: 10px; }
+  margin-bottom: 16px; }
 
 /*end subject list*/
 /* Line chart */

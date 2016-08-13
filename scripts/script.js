@@ -1,92 +1,70 @@
-(function(namespace){
+// Ilia Matrosov
+// 2016
+
+(function(global){
     "use strict";
 
     document.addEventListener("DOMContentLoaded", onDomLoad);
+    
+    var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению",
+        STUDENT_LIST_URL = "../studentsList.json";
 
-    var currentStudentIndex = 0;
-
-    var barArray = [];
-    var radioArray = [];
-
-    var studentsListUrl = "../studentsList.json";
-    var subjectHtmlUrl = "../snippets/subject.html";
-    var linechartBarHtmlUrl = "../snippets/linechart-bar.html";
-    var nameListNameHtmlUrl = "../snippets/name-list__name.html";
-    var calendarHtmlUrl = "../snippets/calendar.html";
-
-    var studentsArray,
-        calendarHtml,
+    var barArray = [],
+        radioArray =[],
+        studentsArray,
         subjectHtml,
         linechartBarHtml,
-        nameListNameHtml;
+        nameListNameHtml,
+        currentStudentIndex = 0;
+
 
     function onDomLoad(){
-
-        $ajaxUtils.sendGetRequest(studentsListUrl,
+        $ajaxUtils.sendGetRequest(STUDENT_LIST_URL,
                         function(parsedObject){
                             studentsArray = parsedObject.students;
                             convertDate(studentsArray);
-                            checkSnippetsLoaded();
+                            onDataLoad();
                         });
 
-        $ajaxUtils.sendGetRequest(subjectHtmlUrl,
-                        function(response){
-                            subjectHtml = response;
-                            checkSnippetsLoaded();
-                        },false);
-
-        $ajaxUtils.sendGetRequest(linechartBarHtmlUrl,
-                        function(response){
-                            linechartBarHtml = response;
-                            checkSnippetsLoaded();
-                        },false);
-
-        $ajaxUtils.sendGetRequest(nameListNameHtmlUrl,
-                        function(response){
-                            nameListNameHtml = response;
-                            checkSnippetsLoaded();
-                        },false);
-
-        $ajaxUtils.sendGetRequest(calendarHtmlUrl,
-                        function(response){
-                            calendarHtml = response;
-                            checkSnippetsLoaded();
-                        },false);
+        getTemplates();
     }
 
-    function checkSnippetsLoaded(){
-        if (!studentsArray) return;
-        if (!subjectHtml) return;
-        if (!linechartBarHtml) return;
-        if (!nameListNameHtml) return;
-        if (!calendarHtml) return;
-
-        onDataLoad();
+    function getTemplates(){
+        subjectHtml = document.querySelector('#template--subject').innerHTML,
+        linechartBarHtml = document.querySelector('#template--linechart-bar').innerHTML,
+        nameListNameHtml = document.querySelector('#template--name-list__name').innerHTML;
     }
 
     function onDataLoad(){
         fillFormFields(currentStudentIndex);
         createEmptyStudentObj();
+        addListeners();
+        initPickmeup();
+    }
+
+    function addListeners(){
         document.getElementById("name-list-container").addEventListener("click", onListContainerClick);
+        document.getElementById("delete-student").addEventListener("click", deleteStudent);
+        document.getElementById("add-subject").addEventListener("click", addSubject);
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
-        document.getElementById("delete-student").addEventListener("click", deleteStudent);
-        document.getElementById("add-subject").addEventListener("click", addSubject);
+    }
 
+    function initPickmeup(){
         $('.input_calendar').pickmeup();
-        
+
         var calendars = document.querySelectorAll(".input_calendar");
         for (var i=0; i < calendars.length; i++) {
             calendars[i].addEventListener("click",function(e){
                 this.select();
-                
                 var siblings = this.parentElement.children;
                 siblings[siblings.length-1].classList.add("button_calendar-active");
             });
             calendars[i].addEventListener("blur",function(e){
-                $('.input_calendar').pickmeup('update');
-                $('.input_calendar').pickmeup('hide');
+                var calendar = $('.input_calendar');
+                calendar.pickmeup('update');
+                calendar.pickmeup('hide');
 
                 var siblings = this.parentElement.children;
                 siblings[siblings.length-1].classList.remove("button_calendar-active");
@@ -95,11 +73,11 @@
         }
     }
 
-
     function onListContainerClick(event){
         if (event.target.classList.contains("name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
             fillFormFields(currentStudentIndex);
+            validateAllFields();
         }
     }
 
@@ -118,23 +96,24 @@
 
     function onSubjectlistChange(event){
         if (event.target.classList.contains("kontur-checkbox")){
-            var radioState = event.target.checked;
-            var barIndex = event.target.dataset.indexNumber;
             redrawLinechart();
         }
     }
 
-
     function fillFormFields(index){
-        var studentData = studentsArray[index];
+        var studentData = studentsArray[index],
+            fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
+            birthDateString = getDateString(studentData.birthDate),
+            enterDateString = getDateString(studentData.enterDate),
+            nameListView = makeNameListView(studentsArray);
 
-        var fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName;
         fillField("full-name",fullName,"text");
         fillField("current-name",fullName,"text");
-
         fillField("last-name",studentData.lastName);
         fillField("first-name",studentData.firstName);
         fillField("second-name",studentData.secondName);
+        fillField("birth-date",birthDateString);
+        fillField("enter-date",enterDateString);
 
         switch (studentData.gender){
             case "male":
@@ -145,23 +124,9 @@
                 break;
         }
 
-        // getFullYear()
-        // getMonth()
-        // getDate()
-
-        var birthDateString = getDateString(studentData.birthDate);
-        fillField("birth-date",birthDateString);
-
-        var enterDateString = getDateString(studentData.enterDate);
-        fillField("enter-date",enterDateString);
-
-
         addSubjectsView(studentData);
-
-        var nameListView = makeNameListView(studentsArray);
         insertHtml("name-list-container",nameListView);
-
-        makeDonutChart(studentData.lessonsSkipped,studentData.lessonsSkippedFair);
+        drawDonutChart(studentData.lessonsSkipped,studentData.lessonsSkippedFair);
     }
 
     function addSubjectsView(studentData) {
@@ -172,7 +137,6 @@
         insertHtml("linechart-container", linechartView);
         updateLinechartArrays();
         redrawLinechart();
-
     }
 
 
@@ -187,7 +151,6 @@
 
             subjectViews.push(newSubjectView);
         }
-
 
         return subjectViews.join("");
     }
@@ -212,13 +175,11 @@
             "#C44741",
             "#0081D4",
             "#C44741",
-            "#FFF0F0"];
-        var colorsCount = barColors.length;
-        // var barWidth = 100/subjectArray.length;
+            "#FFF0F0"],
+            colorsCount = barColors.length,
+            newBar = linechartBarHtml,
+            styles = "";
 
-        var newBar = linechartBarHtml;
-
-        var styles = "";
         styles += " width: 0; ";
         // styles += " width: " + barWidth +  "%; ";
         styles += " background-color: " + (barColors[index%colorsCount])+ " ";
@@ -234,20 +195,20 @@
 
         for (var i=0; i < studentsArray.length; i++) {
             if(i == currentStudentIndex) continue;
-            var studentData = studentsArray[i];
-            var fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName;
 
-            var newNameView = nameListNameHtml;
+            var studentData = studentsArray[i],
+                fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
+                newNameView = nameListNameHtml;
+
             newNameView = insertProperty(newNameView,"fullName",fullName);
             newNameView = insertProperty(newNameView,"indexNumber",i);
-
             namesViews[i] = newNameView;
         }
 
         return namesViews.join("");
     }
 
-    function fillField(fieldName,value,type) {
+    function fillField(fieldName, value, type) {
         type = type||"input";
         var field = document.getElementById(fieldName);
 
@@ -282,14 +243,14 @@
         return string
     }
 
-    function makeDonutChart(lessonsSkipped,lessonsSkippedFair){
+    function drawDonutChart(lessonsSkipped,lessonsSkippedFair){
 
-        var donutChartCanvas = document.getElementById("donut-chart-canvas");
-        var context = donutChartCanvas.getContext("2d");
-        var startPointX = 180;
-        var startPointY = 180;
-        var chartRadius = 145;
-        var holeRadius = 110;
+        var donutChartCanvas = document.getElementById("donut-chart-canvas"),
+            context = donutChartCanvas.getContext("2d"),
+            startPointX = 180,
+            startPointY = 180,
+            chartRadius = 145,
+            holeRadius = 110;
 
         context.clearRect(0, 0, donutChartCanvas.width, donutChartCanvas.height);
 
@@ -354,7 +315,6 @@
         context.fillText(lessonsSkippedFair, startPointX, startPointY + 80);
     }
 
-
     function convertDate(studentsArray){
         for (var i=0; i < studentsArray.length; i++) {
             studentsArray[i].birthDate = new Date(Date.parse(studentsArray[i].birthDate));
@@ -374,10 +334,21 @@
         return dd + '.' + mm + '.' + yy;
     }
 
-
     function validateField(target){
         if (target.value == ""){
-            showError(target,"Поле обязательно к заполнению");
+            showError(target,VALIDATION_ERROR_MESSAGE);
+        } else {
+            resetError(target);
+        }
+    }
+
+    function validateAllFields() {
+        var textFields = document.querySelectorAll(".form-item__input");
+        console.dir(textFields);
+
+        for (var i=0; i < textFields.length; i++) {
+            if (event.target.classList.contains("input_calendar")) continue;
+            validateField(textFields[i]);
         }
     }
 
@@ -388,7 +359,6 @@
 
         target.parentNode.appendChild(msgElem);
         target.classList.add("input-error");
-    //    input-error
     }
 
     function resetError(target) {
@@ -399,11 +369,10 @@
         target.classList.remove("input-error");
     }
 
-
     function redrawLinechart(){
-        var checkedRadioArray = document.querySelectorAll(".kontur-checkbox:checked");
+        var checkedRadioArray = document.querySelectorAll(".kontur-checkbox:checked"),
+            barWidth = 100/checkedRadioArray.length; //in percent of the parent
 
-        var barWidth = 100/checkedRadioArray.length;
         for (var i=0; i < barArray.length; i++) {
             if (!radioArray[i].checked){
                 barArray[i].style.width = 0;
@@ -414,9 +383,8 @@
     }
 
     function updateLinechartArrays(){
-
-        var barNodeList = document.querySelectorAll(".linechart__bar");
-        var radioNodeList = document.querySelectorAll(".kontur-checkbox");
+        var barNodeList = document.querySelectorAll(".linechart__bar"),
+            radioNodeList = document.querySelectorAll(".kontur-checkbox");
 
         barArray = Array.prototype.slice.call(barNodeList);
         radioArray = Array.prototype.slice.call(radioNodeList);
@@ -425,7 +393,6 @@
         radioArray.sort(compare);
 
         function compare(a, b) {
-            // console.log(a.dataset.indexNumber,b.dataset.indexNumber);
             if (a.dataset.indexNumber > b.dataset.indexNumber) return 1;
             if (a.dataset.indexNumber < b.dataset.indexNumber) return -1;
         }
@@ -434,6 +401,7 @@
     function deleteStudent(){
         studentsArray.splice(currentStudentIndex,1);
         fillFormFields(currentStudentIndex);
+        //TODO if no more students there is an error
     }
 
     function createEmptyStudentObj() {
@@ -457,12 +425,11 @@
     }
 
     function addSubject(){
+        var subjects = document.getElementById("subject-list-container"),
+            index = subjects.childElementCount,
+            studentData = studentsArray[currentStudentIndex],
+            name = "Новый предмет " + (index + 1);
 
-
-        var subjects = document.getElementById("subject-list-container");
-        var index = subjects.childElementCount;
-        var studentData = studentsArray[currentStudentIndex];
-        var name = "Новый предмет " + (index + 1);
         studentData.subjects.push(name);
 
         var newSubjectView = subjectHtml;
@@ -471,13 +438,13 @@
         newSubjectView = insertProperty(newSubjectView,"subjectNumber",index);
         newSubjectView = insertProperty(newSubjectView,"indexNumber",index);
 
-        subjects.lastChild.insertAdjacentHTML("afterend", newSubjectView);
+        subjects.children[subjects.children.length-1].insertAdjacentHTML("afterend", newSubjectView);
 
 
         var linechart = document.getElementById("linechart-container");
         var newSubjectBarView = makeBar(name, index);
 
-        linechart.lastChild.insertAdjacentHTML("afterend", newSubjectBarView);
+        linechart.children[linechart.children.length-1].insertAdjacentHTML("afterend", newSubjectBarView);
 
 
         updateLinechartArrays();

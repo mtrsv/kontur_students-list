@@ -1,15 +1,18 @@
+<!--ILIA MATROSOV-->
+<!--2016-->
+
 <!DOCTYPE HTML>
 <html lang="ru">
 <head>
     <title>Список студентов</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="styles/style.css"/>
-    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
 
-    <script src="scripts/ajax-utils.js"></script>
-    <script src="scripts/jquery-2.1.4.min.js"></script>
-    <script src="scripts/jquery.pickmeup.js"></script>
-    <script src="scripts/script.js"></script>
+    <script src="scripts/ajax-utils.js" defer></script>
+    <script src="scripts/jquery-2.1.4.min.js" defer></script>
+    <script src="scripts/jquery.pickmeup.js" defer></script>
+    <script src="scripts/script.js" defer></script>
 </head>
 <body>
 <div class="main-container">
@@ -29,7 +32,7 @@
 
         <div class="name-list">
             <button class="name-list__button button button_add">Добавить студента</button>
-            <button class="name-list__button button button_save" title="Сохранить изменения">Сохранить изменения</button>
+            <button class="name-list__button button button_save button-disabled" title="Сохранить изменения">Сохранить изменения</button>
 
             <div class="name-list__name_current">
                 <span id="current-name" class="name-list__name" href="#">Константинопольский Константин Константинович</span>
@@ -149,6 +152,17 @@
     </div>
 </div>
 
-
+<script type="text/template" id="template--name-list__name">
+    <span class="name-list__name link" data-index-number="{{indexNumber}}">{{fullName}}</span>
+</script>
+<script type="text/template" id="template--linechart-bar">
+    <div class="linechart__bar" style="{{styles}}" data-index-number="{{indexNumber}}"  title="{{subjectName}}"></div>
+</script>
+<script type="text/template" id="template--subject">
+    <span class="subject-list__subject">
+    <input type="checkbox" id="subject_{{subjectNumber}}" class="kontur-checkbox"  data-index-number="{{indexNumber}}" checked="checked">
+    <label for="subject_{{subjectNumber}}">{{subjectName}}</label>
+</span>
+</script>
 </body>
 </html>
