@@ -7,7 +7,7 @@
     document.addEventListener("DOMContentLoaded", onDomLoad);
     
     var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению",
-        STUDENT_LIST_URL = "../studentsList.json";
+        STUDENT_LIST_URL = "/../studentsList.json";
 
     var barArray = [],
         radioArray =[],
