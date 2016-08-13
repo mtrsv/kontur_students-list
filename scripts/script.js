@@ -46,6 +46,8 @@
         document.getElementById("name-list-container").addEventListener("click", onListContainerClick);
         document.getElementById("delete-student").addEventListener("click", deleteStudent);
         document.getElementById("add-subject").addEventListener("click", addSubject);
+        document.getElementById("add-student").addEventListener("click", addStudent);
+        document.getElementById("save-student").addEventListener("click", saveStudent);
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
@@ -79,6 +81,15 @@
             fillFormFields(currentStudentIndex);
             validateAllFields();
         }
+    }
+
+    function addStudent(e) {
+        console.log("add");
+    }
+
+    function saveStudent(e) {
+        if (e.target.closest(".button-disabled")) return;
+        console.log("save");
     }
 
     function onListInputBlur(event){
@@ -405,23 +416,23 @@
     }
 
     function createEmptyStudentObj() {
-        // var emptyObj = {};
-        // studentObj = studentsArray[0];
-        // // console.dir(studentObj);
-        //
-        //
-        // for (var key in studentObj){
-        //     emptyObj[key] = {}
-        //     console.log(key + " " + typeof studentObj[key]);
-        //     switch (typeof studentObj[key]){
-        //         case "string":
-        //             emptyObj[key] = "";
-        //             break;
-        //     }
-        //
-        // }
-        //
-        // console.dir(emptyObj);
+        var emptyObj = {};
+        var studentObj = studentsArray[0];
+        // console.dir(studentObj);
+
+
+        for (var key in studentObj){
+            emptyObj[key] = {}
+            console.log(key + " " + typeof studentObj[key]);
+            switch (typeof studentObj[key]){
+                case "string":
+                    emptyObj[key] = "";
+                    break;
+            }
+
+        }
+
+        console.dir(emptyObj);
     }
 
     function addSubject(){

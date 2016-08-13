@@ -48,7 +48,7 @@ $sprites: url("../images/sprites.png");
 .button_save::after {
   position: absolute;
   content: attr(title);
-  padding: 0px 15px;
+  padding: 0 0 0 15px;
   color: rgba(255, 255, 255, .99);
   top: 6px;
   left: 9px;
@@ -106,9 +106,15 @@ $sprites: url("../images/sprites.png");
   display: inline-block;
 }
 
-.button-disabled {
+.button.button-disabled {
+  background: none;
   background-color: lightgrey;
   color: #404040;
+  outline: none;
+  border: 1px solid transparent;
+}
+.button.button-disabled:after{
+  content:"";
 }
 
 /* radio button*/
