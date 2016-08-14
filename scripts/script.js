@@ -27,8 +27,6 @@
                         function(parsedObject){
                             studentsArray = parsedObject.students;
                             studentTemplate = parsedObject.template;
-                            console.dir(studentsArray[0]);
-                            console.dir(studentTemplate);
                             onDataLoad();
                         });
     }
@@ -54,12 +52,14 @@
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
-        // document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
-        document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this));
+        document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
+        //document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this));
     }
 
     function initPickmeup(){
-        $('.input_calendar').pickmeup();
+        $('.input_calendar').pickmeup({
+            change : temporarySaveChanges.bind(this)
+        });
 
         var calendars = document.querySelectorAll(".input_calendar");
         for (var i=0; i < calendars.length; i++) {
@@ -156,8 +156,6 @@
 
     function addSubjectsView(studentData) {
         var subjectsView = makeSubjectsView(studentData.subjects);
-        console.dir(studentData.subjects);
-        console.dir(subjectsView);
         insertHtml("subject-list-container",subjectsView);
 
         var linechartView = makeLinechartView(studentData.subjects);
