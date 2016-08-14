@@ -27,7 +27,8 @@
                         function(parsedObject){
                             studentsArray = parsedObject.students;
                             studentTemplate = parsedObject.template;
-                            convertDate(studentsArray);
+                            console.dir(studentsArray[0]);
+                            console.dir(studentTemplate);
                             onDataLoad();
                         });
     }
@@ -90,9 +91,10 @@
 
     function addStudent(e) {
         var newStudent = getClone(studentTemplate);
-        currentStudentIndex = studentsArray.length;
         studentsArray.push(newStudent);
+        currentStudentIndex = studentsArray.length - 1;
         fillFormFields(currentStudentIndex);
+        checkSaveButtonState();
     }
 
     function saveStudent(e) {
@@ -127,6 +129,8 @@
             enterDateString = getDateString(studentData.enterDate),
             nameListView = makeNameListView();
 
+        insertHtml("name-list-container",nameListView);
+
         fillField("full-name",fullName,"text");
         fillField("current-name",fullName,"text");
         fillField("last-name",studentData.lastName);
@@ -145,7 +149,6 @@
         }
 
         addSubjectsView(studentData);
-        insertHtml("name-list-container",nameListView);
         drawDonutChart(studentData.lessonsSkipped,studentData.lessonsSkippedFair);
 
         checkSaveButtonState();
@@ -153,6 +156,8 @@
 
     function addSubjectsView(studentData) {
         var subjectsView = makeSubjectsView(studentData.subjects);
+        console.dir(studentData.subjects);
+        console.dir(subjectsView);
         insertHtml("subject-list-container",subjectsView);
 
         var linechartView = makeLinechartView(studentData.subjects);
@@ -337,27 +342,14 @@
         context.fillText(lessonsSkippedFair, startPointX, startPointY + 80);
     }
 
-    function convertDate(studentsArray){
+    function getDateString(dateString) {
+        var date = new Date(dateString),
+            dd = date.getDate(),
+            mm = date.getMonth() + 1,
+            yy = date.getFullYear();
 
-        for (var i=0; i < studentsArray.length; i++) {
-            convert(studentsArray[i]);
-        }
-        convert(studentTemplate);
-
-        function convert(student){
-            student.birthDate = new Date(Date.parse(student.birthDate));
-            student.enterDate = new Date(Date.parse(student.enterDate));
-        }
-    }
-
-    function getDateString(date) {
-        var dd = date.getDate();
         if (dd < 10) dd = '0' + dd;
-
-        var mm = date.getMonth() + 1;
         if (mm < 10) mm = '0' + mm;
-
-        var yy = date.getFullYear();
 
         return dd + '.' + mm + '.' + yy;
     }
@@ -427,8 +419,12 @@
 
     function deleteStudent(){
         studentsArray.splice(currentStudentIndex,1);
+        currentStudentIndex--;
+        if (currentStudentIndex < 0){
+            currentStudentIndex = 0;
+            addStudent();
+        }
         fillFormFields(currentStudentIndex);
-        //TODO if no more students there is an error
     }
 
     function addSubject(){
@@ -478,9 +474,9 @@
         function getDate(string){
             var arr = string.split("."),
                 yy = arr[2],
-                mm = arr[1]-1,
+                mm = arr[1],
                 dd = arr[0];
-            return new Date(yy,mm,dd);
+            return yy + "." + mm + "." + dd;
         }
         function getFieldData(fieldName,type) {
             var field = document.getElementById(fieldName),
@@ -527,15 +523,7 @@
     }
 
     function getClone(original){
-        var clone = {};
-
-        for (var key in original) {
-            if (typeof (original[key]) == "object"){
-                clone[key] = getClone(original[key]);
-            } else {
-                clone[key] = original[key];
-            }
-        }
+        var clone = JSON.parse(JSON.stringify(original));
 
         return clone;
     }

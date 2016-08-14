@@ -1,14 +1,14 @@
 {
   "template": {
-    "firstName": "",
-    "secondName": "",
-    "lastName": "",
+    "firstName": "Имя",
+    "secondName": "Отчество",
+    "lastName": "Фамилия",
     "gender": "male",
     "birthDate": "2000.01.01",
     "enterDate": "2000.01.01",
-    "subjects": ["First", "Second","Third"],
-    "lessonsSkipped": 50,
-    "lessonsSkippedFair": 100
+    "subjects": ["First", "Second", "Third"],
+    "lessonsSkipped": 10,
+    "lessonsSkippedFair": 5
   },
   "students": [{
     "firstName": "Иван",
@@ -17,7 +17,7 @@
     "gender": "male",
     "birthDate": "1993.08.15",
     "enterDate": "2010.07.21",
-    "subjects": ["First", "Second","Third","Another","Add some more","Ok","One more"],
+    "subjects": ["First", "Second", "Third","Another","Add some more","Ok","One more"],
     "lessonsSkipped": 82,
     "lessonsSkippedFair": 20
   },{
@@ -37,7 +37,7 @@
     "gender": "male",
     "birthDate": "1992.01.05",
     "enterDate": "2010.08.01",
-    "subjects": ["First", "Second","Third","1234567890123456789012345","5 Another","6 Another","7 ---==-"],
+    "subjects": ["First", "Second", "Third", "1234567890123456789012345", "5 Another", "6 Another", "7 ---==-"],
     "lessonsSkipped": 55,
     "lessonsSkippedFair": 12
   },{
