@@ -12,6 +12,7 @@
     var barArray = [],
         radioArray =[],
         studentsArray,
+        studentTemplate,
         unsavedStudentsArray = [],
         subjectHtml,
         linechartBarHtml,
@@ -20,14 +21,15 @@
 
 
     function onDomLoad(){
+        getTemplates();
+
         $ajaxUtils.sendGetRequest(STUDENT_LIST_URL,
                         function(parsedObject){
                             studentsArray = parsedObject.students;
+                            studentTemplate = parsedObject.template;
                             convertDate(studentsArray);
                             onDataLoad();
                         });
-
-        getTemplates();
     }
 
     function getTemplates(){
@@ -38,7 +40,6 @@
 
     function onDataLoad(){
         fillFormFields(currentStudentIndex);
-        createEmptyStudentObj();
         addListeners();
         initPickmeup();
     }
@@ -80,7 +81,7 @@
 
     function onListContainerClick(event){
         if (event.target.classList.contains("name-list__name")){
-            temporarySaveChanges();
+            //temporarySaveChanges();
             currentStudentIndex = event.target.dataset.indexNumber;
             fillFormFields(currentStudentIndex);
             validateAllFields();
@@ -88,13 +89,15 @@
     }
 
     function addStudent(e) {
-        console.log("add");
+        var newStudent = getClone(studentTemplate);
+        currentStudentIndex = studentsArray.length;
+        studentsArray.push(newStudent);
+        fillFormFields(currentStudentIndex);
     }
 
     function saveStudent(e) {
         if (e.target.closest(".button-disabled")) return;
-        console.log("save");
-        temporarySaveChanges();
+        //temporarySaveChanges();
         saveChanges();
     }
 
@@ -118,11 +121,11 @@
     }
 
     function fillFormFields(index){
-        var studentData = studentsArray[index],
+        var studentData = unsavedStudentsArray[index] || studentsArray[index],
             fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
             birthDateString = getDateString(studentData.birthDate),
             enterDateString = getDateString(studentData.enterDate),
-            nameListView = makeNameListView(studentsArray);
+            nameListView = makeNameListView();
 
         fillField("full-name",fullName,"text");
         fillField("current-name",fullName,"text");
@@ -208,13 +211,13 @@
         return newBar;
     }
 
-    function makeNameListView(studentsArray) {
+    function makeNameListView() {
         var namesViews = [];
 
         for (var i=0; i < studentsArray.length; i++) {
             if(i == currentStudentIndex) continue;
 
-            var studentData = studentsArray[i],
+            var studentData = unsavedStudentsArray[i] || studentsArray[i],
                 fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
                 newNameView = nameListNameHtml;
 
@@ -335,9 +338,15 @@
     }
 
     function convertDate(studentsArray){
+
         for (var i=0; i < studentsArray.length; i++) {
-            studentsArray[i].birthDate = new Date(Date.parse(studentsArray[i].birthDate));
-            studentsArray[i].enterDate = new Date(Date.parse(studentsArray[i].enterDate));
+            convert(studentsArray[i]);
+        }
+        convert(studentTemplate);
+
+        function convert(student){
+            student.birthDate = new Date(Date.parse(student.birthDate));
+            student.enterDate = new Date(Date.parse(student.enterDate));
         }
     }
 
@@ -363,7 +372,6 @@
 
     function validateAllFields() {
         var textFields = document.querySelectorAll(".form-item__input");
-        console.dir(textFields);
 
         for (var i=0; i < textFields.length; i++) {
             if (event.target.classList.contains("input_calendar")) continue;
@@ -423,26 +431,6 @@
         //TODO if no more students there is an error
     }
 
-    function createEmptyStudentObj() {
-        var emptyObj = {};
-        var studentObj = studentsArray[0];
-        // console.dir(studentObj);
-
-
-        for (var key in studentObj){
-            emptyObj[key] = {}
-            //console.log(key + " " + typeof studentObj[key]);
-            switch (typeof studentObj[key]){
-                case "string":
-                    emptyObj[key] = "";
-                    break;
-            }
-
-        }
-
-        // /console.dir(emptyObj);
-    }
-
     function addSubject(){
         var subjects = document.getElementById("subject-list-container"),
             index = subjects.childElementCount,
@@ -477,14 +465,23 @@
         newStudentData.lastName = getFieldData("last-name");
         newStudentData.firstName = getFieldData("first-name");
         newStudentData.secondName = getFieldData("second-name");
-        newStudentData.birthDate = getFieldData("birth-date");
-        newStudentData.enterDate = getFieldData("enter-date");
+        newStudentData.birthDate = getDate(getFieldData("birth-date"));
+        newStudentData.enterDate = getDate(getFieldData("enter-date"));
         newStudentData.gender = getFieldData("radio_gender","radio");
+        newStudentData.subjects = studentsArray[currentStudentIndex].subjects;
+        newStudentData.lessonsSkipped = studentsArray[currentStudentIndex].lessonsSkipped;
+        newStudentData.lessonsSkippedFair = studentsArray[currentStudentIndex].lessonsSkippedFair;
 
         unsavedStudentsArray[currentStudentIndex] = newStudentData;
-        //console.dir(newStudentData);
         checkSaveButtonState();
 
+        function getDate(string){
+            var arr = string.split("."),
+                yy = arr[2],
+                mm = arr[1]-1,
+                dd = arr[0];
+            return new Date(yy,mm,dd);
+        }
         function getFieldData(fieldName,type) {
             var field = document.getElementById(fieldName),
                 type = type || "input",
@@ -512,17 +509,16 @@
         var changedStudent = unsavedStudentsArray[currentStudentIndex];
         if (!changedStudent) return;
 
-        changedStudent.subjects = studentsArray[currentStudentIndex].subjects;
-        changedStudent.lessonsSkipped = studentsArray[currentStudentIndex].lessonsSkipped;
-        changedStudent.lessonsSkippedFair = studentsArray[currentStudentIndex].lessonsSkippedFair;
+
 
         studentsArray[currentStudentIndex] = changedStudent;
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
+        fillFormFields(currentStudentIndex);
     }
 
     function checkSaveButtonState(){
-        console.log("check")
+        //console.log("check")
         if (unsavedStudentsArray[currentStudentIndex]){
             document.getElementById("save-student").classList.remove("button-disabled");
         } else {
@@ -530,6 +526,18 @@
         }
     }
 
+    function getClone(original){
+        var clone = {};
 
+        for (var key in original) {
+            if (typeof (original[key]) == "object"){
+                clone[key] = getClone(original[key]);
+            } else {
+                clone[key] = original[key];
+            }
+        }
+
+        return clone;
+    }
 
 }(window));

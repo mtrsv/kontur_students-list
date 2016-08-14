@@ -1,4 +1,15 @@
 {
+  "template": {
+    "firstName": "",
+    "secondName": "",
+    "lastName": "",
+    "gender": "male",
+    "birthDate": "2000.01.01",
+    "enterDate": "2000.01.01",
+    "subjects": ["First", "Second","Third"],
+    "lessonsSkipped": 50,
+    "lessonsSkippedFair": 100
+  },
   "students": [{
     "firstName": "Иван",
     "secondName": "Иванович",
