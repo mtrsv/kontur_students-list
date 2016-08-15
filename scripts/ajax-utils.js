@@ -50,13 +50,24 @@ function handleResponse(request,
     }
 
     if (isJsonResponse) {
-      responseHandler(JSON.parse(request.responseText));
+        try {
+            responseHandler(JSON.parse(request.responseText));
+        } catch(e){
+            // console.log("Error");
+            // console.dir(e);
+            responseHandler({
+                isError:true,
+                cause:e});
+        }
+
     }
     else {
       responseHandler(request.responseText);
     }
   }
 }
+
+
 
 
 // Expose utility to the global object

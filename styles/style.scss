@@ -1,4 +1,5 @@
 @import 'reset.scss';
+@import 'pickmeup';
 
 // Ilia Matrosov
 // 2016
@@ -331,6 +332,10 @@ body {
 
   padding: 16px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+  height: 55px;
+  transition: all .8s;
 }
 
 .name-list {
@@ -792,4 +797,44 @@ body {
 
 /*end donut chart*/
 
-@import 'pickmeup';
+.error-container{
+  padding: 30px 0;
+  text-align: center;
+  line-height: 20px;
+}
+
+.pickmeup{
+  font-family: 'PT Sans', sans-serif;
+
+}
+
+@media print{
+  *{
+    visibility: hidden;
+    position: relative;
+  }
+
+  body{
+    background: none;
+  }
+
+  .toprint * {
+    visibility: visible;
+  }
+
+  .toprint{
+    margin-top: -110px;
+    position: relative;
+    //top: -300px;
+    left: -100px;
+    top: 0;
+  }
+
+
+
+  .link{
+    visibility: hidden;
+
+  }
+
+}

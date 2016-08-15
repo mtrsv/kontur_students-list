@@ -5,7 +5,6 @@
     "use strict";
 
     document.addEventListener("DOMContentLoaded", onDomLoad);
-    
     var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению",
         STUDENT_LIST_URL = "studentsList.json";
 
@@ -13,6 +12,7 @@
         radioArray =[],
         studentsArray,
         studentTemplate,
+        errorTemplate,
         unsavedStudentsArray = [],
         subjectHtml,
         linechartBarHtml,
@@ -25,59 +25,161 @@
 
         $ajaxUtils.sendGetRequest(STUDENT_LIST_URL,
                         function(parsedObject){
+                            if (parsedObject.isError) {
+                                showLoadingError(parsedObject.cause);
+                                return;
+                            }
                             studentsArray = parsedObject.students;
                             studentTemplate = parsedObject.template;
                             onDataLoad();
+
                         });
     }
 
     function getTemplates(){
         subjectHtml = document.querySelector('#template--subject').innerHTML,
         linechartBarHtml = document.querySelector('#template--linechart-bar').innerHTML,
-        nameListNameHtml = document.querySelector('#template--name-list__name').innerHTML;
+        nameListNameHtml = document.querySelector('#template--name-list__name').innerHTML,
+        errorTemplate = document.querySelector("#template--error").innerHTML;
     }
 
     function onDataLoad(){
         fillFormFields(currentStudentIndex);
         addListeners();
         initPickmeup();
+        showGroupList();
+
     }
 
     function addListeners(){
-        document.getElementById("name-list-container").addEventListener("click", onListContainerClick);
-        document.getElementById("delete-student").addEventListener("click", deleteStudent);
-        document.getElementById("add-subject").addEventListener("click", addSubject);
-        document.getElementById("add-student").addEventListener("click", addStudent);
-        document.getElementById("save-student").addEventListener("click", saveStudent.bind(this));
+
+        document.addEventListener("click", onClick);
+        document.addEventListener("mousedown", onMouseDown);
+
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
+        document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this),true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
         document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
-        //document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this));
+    }
+
+    function onClick(e){
+        if (e.target.closest("#name-list-container")) {
+            onListContainerClick(e);
+        }
+        if (e.target.closest("#delete-student")) {
+            deleteStudent();
+        }
+        if (e.target.closest("#add-subject")) {
+            addSubject();
+        }
+        if (e.target.closest("#add-student")) {
+            addStudent();
+        }
+        if (e.target.closest("#save-student")) {
+            saveStudent(e);
+        }
+        if (e.target.closest(".button_print")) {
+            window.print();
+        }
+
+        if (e.target.closest(".datepicker")){
+            var datapicker = e.target.closest(".datepicker");
+            var input = datapicker.querySelector(".input_calendar");
+            input.dispatchEvent(new Event("click"));
+            input.focus();
+            input.select();
+            var button = datapicker.querySelector(".button_calendar");
+            button.classList.add("button_calendar-active");
+        }
+    }
+
+    function onMouseDown(e){
+        if (!e.target.closest(".datepicker")){
+            hideAllDatePickers();
+        }
+        if (e.target.closest(".datepicker")){
+            hideAllDatePickers();
+
+            var datapicker = e.target.closest(".datepicker");
+            $('.input_calendar',datapicker).pickmeup('show');
+            var input = datapicker.querySelector(".input_calendar");
+            input.dispatchEvent(new Event("click"));
+            window.t = input;
+            console.dir(input);
+            input.focus();
+            //input.select();
+
+        }
+
+        function hideAllDatePickers(){
+            var calendars = document.querySelectorAll(".datepicker .input_calendar");
+            for (var i=0; i < calendars.length; i++) {
+                calendars[i].dataset.visible = null;
+                var button = calendars[i].parentNode.querySelector(".button_calendar");
+                button.classList.remove("button_calendar-active");
+            }
+            $('.input_calendar').pickmeup('hide');
+        }
     }
 
     function initPickmeup(){
         $('.input_calendar').pickmeup({
-            change : temporarySaveChanges.bind(this)
-        });
+            change : function() {
+                temporarySaveChanges.bind(this),
+                this.dataset.visible = null;
+            },
+            show: function(){
+                this.dataset.visible = "true";
+                console.log("show");
+                return true;
 
-        var calendars = document.querySelectorAll(".input_calendar");
+            },
+            hide: function () {
+                console.log("hide");
+                return this.dataset.visible !== "true";
+                console.log(this);
+                return true;
+            }
+        });
+        /*
+        var button = document.querySelector(".button_calendar");
+
+        var calendars = document.querySelectorAll(".datepicker .input_calendar");
         for (var i=0; i < calendars.length; i++) {
             calendars[i].addEventListener("click",function(e){
-                this.select();
-                var siblings = this.parentElement.children;
-                siblings[siblings.length-1].classList.add("button_calendar-active");
+                e.target.select();
+                var button = e.target.parentNode.querySelector(".button_calendar");
+                button.classList.add("button_calendar-active");
             });
             calendars[i].addEventListener("blur",function(e){
-                var calendar = $('.input_calendar');
+                /*var calendar = $('.input_calendar');
                 calendar.pickmeup('update');
+                this.dataset.visible = null;
                 calendar.pickmeup('hide');
 
-                var siblings = this.parentElement.children;
-                siblings[siblings.length-1].classList.remove("button_calendar-active");
+
+                var button = this.parentNode.querySelector(".button_calendar");
+                button.classList.remove("button_calendar-active");
             });
 
+            var button = calendars[i].parentNode.querySelector(".button_calendar");
+            button.addEventListener("click",function(e){
+                var input = this.parentNode.querySelector(".input_calendar");
+                input.dispatchEvent(new Event("click"));
+                input.dataset.visible = "true";
+                // input.focus();
+                //input.select();
+                $('.input_calendar',this.parentNode).pickmeup('show');
+                // calendar.pickmeup('show');
+
+                // global.test();
+                // $('.input_calendar',this.parentNode).pickmeup('show');
+                // $('.input_calendar',this.parentNode).pickmeup('update');
+                e.preventDefault();
+            });
         }
+        */
     }
 
     function onListContainerClick(event){
@@ -417,9 +519,12 @@
 
     function deleteStudent(){
         studentsArray.splice(currentStudentIndex,1);
+        unsavedStudentsArray.splice(currentStudentIndex,1);
         currentStudentIndex--;
         if (currentStudentIndex < 0){
             currentStudentIndex = 0;
+        }
+        if (studentsArray.length == 0){
             addStudent();
         }
         fillFormFields(currentStudentIndex);
@@ -525,5 +630,21 @@
 
         return clone;
     }
+
+    function showLoadingError(e){
+        var errorMessage = document.createElement("div");
+        errorMessage.innerHTML = errorTemplate.innerHTML;
+        document.querySelector(".group-list").insertAdjacentHTML("afterEnd",errorTemplate);
+        console.log(e);
+    }
+
+    function showGroupList(){
+        document.querySelector(".group-list").style.height = "auto";
+    }
+
+
+
+    global.reloadStudentsData = onDomLoad;
+
 
 }(window));

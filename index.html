@@ -43,7 +43,7 @@
             </div>
 
 
-            <article class="person-data">
+            <article class="person-data toprint">
                 <form id="data-container">
                     <span class="person-data__title">Стандартные личные данные</span>
                     <span id="delete-student" class="person-data__link link">Удалить</span>
@@ -162,6 +162,14 @@
     <span class="subject-list__subject">
     <input type="checkbox" id="subject_{{subjectNumber}}" class="kontur-checkbox"  data-index-number="{{indexNumber}}" checked="checked">
     <label for="subject_{{subjectNumber}}">{{subjectName}}</label>
+</span>
+</script>
+<script type="text/template" id="template--error">
+    <div class="error-container">
+        <span>Не удалось получить данные.</span><br>
+        <a href="" onclick="reloadStudentsData">Повторить</a>
+    </div>
+
 </span>
 </script>
 </body>
