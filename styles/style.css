@@ -602,7 +602,7 @@ body {
   height: 15px;
   display: inline-block; }
 
-.button_calendar-active {
+.input_calendar:focus + .button_calendar {
   border: #5199DB solid 2px;
   border-radius: 3px;
   border-left: none;

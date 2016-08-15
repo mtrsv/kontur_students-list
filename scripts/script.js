@@ -54,7 +54,6 @@
     function addListeners(){
 
         document.addEventListener("click", onClick);
-        document.addEventListener("mousedown", onMouseDown);
 
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
@@ -86,42 +85,15 @@
         if (e.target.closest(".datepicker")){
             var datapicker = e.target.closest(".datepicker");
             var input = datapicker.querySelector(".input_calendar");
-            input.dispatchEvent(new Event("click"));
+            if (e.target != input) input.dispatchEvent(new Event("click"));
             input.focus();
             input.select();
-            var button = datapicker.querySelector(".button_calendar");
-            button.classList.add("button_calendar-active");
-        }
-    }
-
-    function onMouseDown(e){
-        if (!e.target.closest(".datepicker")){
-            hideAllDatePickers();
-        }
-        if (e.target.closest(".input_calendar")){
-            hideAllDatePickers();
-
-            var datapicker = e.target.closest(".datepicker").parentNode;
-            var input = datapicker.querySelector(".input_calendar");
-            input.focus();
-            input.select();
-            var button = datapicker.querySelector(".button_calendar");
-            button.classList.add("button_calendar-active");
-        }
-
-        function hideAllDatePickers(){
-            var calendars = document.querySelectorAll(".datepicker .input_calendar");
-            for (var i=0; i < calendars.length; i++) {
-                calendars[i].dataset.visible = null;
-                var button = calendars[i].parentNode.querySelector(".button_calendar");
-                button.classList.remove("button_calendar-active");
-            }
-            $('.input_calendar').pickmeup('hide');
         }
     }
 
     function initPickmeup(){
         $('.input_calendar').pickmeup({
+            hide_on_select: true,
             change : function() {
                 temporarySaveChanges.bind(this);
             }
