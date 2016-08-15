@@ -73,7 +73,7 @@
 		trigger_event	: 'click touchstart',
 		class_name		: '',
 		separator		: ' - ',
-		hide_on_select	: true,
+		hide_on_select	: false,
 		min				: null,
 		max				: null,
 		render			: function () {},

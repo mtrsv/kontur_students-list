@@ -123,8 +123,7 @@
     function initPickmeup(){
         $('.input_calendar').pickmeup({
             change : function() {
-                temporarySaveChanges.bind(this),
-                this.dataset.visible = null;
+                temporarySaveChanges.bind(this);
             }
         });
 
