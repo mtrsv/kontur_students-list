@@ -98,18 +98,15 @@
         if (!e.target.closest(".datepicker")){
             hideAllDatePickers();
         }
-        if (e.target.closest(".datepicker")){
+        if (e.target.closest(".input_calendar")){
             hideAllDatePickers();
 
-            var datapicker = e.target.closest(".datepicker");
-            $('.input_calendar',datapicker).pickmeup('show');
+            var datapicker = e.target.closest(".datepicker").parentNode;
             var input = datapicker.querySelector(".input_calendar");
-            input.dispatchEvent(new Event("click"));
-            window.t = input;
-            console.dir(input);
             input.focus();
-            //input.select();
-
+            input.select();
+            var button = datapicker.querySelector(".button_calendar");
+            button.classList.add("button_calendar-active");
         }
 
         function hideAllDatePickers(){
@@ -128,58 +125,20 @@
             change : function() {
                 temporarySaveChanges.bind(this),
                 this.dataset.visible = null;
-            },
-            show: function(){
-                this.dataset.visible = "true";
-                console.log("show");
-                return true;
-
-            },
-            hide: function () {
-                console.log("hide");
-                return this.dataset.visible !== "true";
-                console.log(this);
-                return true;
             }
         });
-        /*
-        var button = document.querySelector(".button_calendar");
+
 
         var calendars = document.querySelectorAll(".datepicker .input_calendar");
         for (var i=0; i < calendars.length; i++) {
-            calendars[i].addEventListener("click",function(e){
-                e.target.select();
-                var button = e.target.parentNode.querySelector(".button_calendar");
-                button.classList.add("button_calendar-active");
-            });
+
             calendars[i].addEventListener("blur",function(e){
-                /*var calendar = $('.input_calendar');
+                var calendar = $('.input_calendar');
                 calendar.pickmeup('update');
-                this.dataset.visible = null;
                 calendar.pickmeup('hide');
-
-
-                var button = this.parentNode.querySelector(".button_calendar");
-                button.classList.remove("button_calendar-active");
-            });
-
-            var button = calendars[i].parentNode.querySelector(".button_calendar");
-            button.addEventListener("click",function(e){
-                var input = this.parentNode.querySelector(".input_calendar");
-                input.dispatchEvent(new Event("click"));
-                input.dataset.visible = "true";
-                // input.focus();
-                //input.select();
-                $('.input_calendar',this.parentNode).pickmeup('show');
-                // calendar.pickmeup('show');
-
-                // global.test();
-                // $('.input_calendar',this.parentNode).pickmeup('show');
-                // $('.input_calendar',this.parentNode).pickmeup('update');
-                e.preventDefault();
             });
         }
-        */
+
     }
 
     function onListContainerClick(event){
