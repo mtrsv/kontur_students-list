@@ -81,6 +81,9 @@
         if (e.target.closest(".button_print")) {
             window.print();
         }
+        if (e.target.closest(".link-reset-changes")) {
+            resetChanges();
+        }
 
         if (e.target.closest(".datepicker")){
             var datapicker = e.target.closest(".datepicker");
@@ -94,8 +97,8 @@
     function initPickmeup(){
         $('.input_calendar').pickmeup({
             hide_on_select: true,
-            change : function() {
-                temporarySaveChanges.bind(this);
+            change: function() {
+                temporarySaveChanges();
             }
         });
 
@@ -546,11 +549,19 @@
         fillFormFields(currentStudentIndex);
     }
 
+    function resetChanges(){
+        unsavedStudentsArray[currentStudentIndex] = null;
+        checkSaveButtonState();
+        fillFormFields(currentStudentIndex);
+    }
+
     function checkSaveButtonState(){
         //console.log("check")
         if (unsavedStudentsArray[currentStudentIndex]){
             document.getElementById("save-student").classList.remove("button-disabled");
+            document.querySelector(".link-reset-changes").style.marginTop = "-20px";
         } else {
+            document.querySelector(".link-reset-changes").style.marginTop = "";
             document.getElementById("save-student").classList.add("button-disabled");
         }
     }

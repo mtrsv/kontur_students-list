@@ -71,6 +71,14 @@ $sprites: url("../images/sprites.png");
   display: inline-block;
 }
 
+.link-reset-changes{
+  float: left;
+  margin-top: -45px;
+  //margin-top: -20px;
+  padding-left: 25px;
+  transition: all .5s;
+}
+
 .button_print{
   width: 120px;
 }
