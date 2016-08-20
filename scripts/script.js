@@ -250,21 +250,38 @@
     }
 
     function makeNameListView() {
-        var namesViews = [];
+        var namesViews = [],
+            resultHtml = "";
 
         for (var i=0; i < studentsArray.length; i++) {
             if(i == currentStudentIndex) continue;
 
             var studentData = unsavedStudentsArray[i] || studentsArray[i],
                 fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
-                newNameView = nameListNameHtml;
+                newNameView = nameListNameHtml,
+                newNameObj;
 
             newNameView = insertProperty(newNameView,"fullName",fullName);
             newNameView = insertProperty(newNameView,"indexNumber",i);
-            namesViews[i] = newNameView;
+            newNameObj = {};
+            newNameObj.view = newNameView;
+            newNameObj.sortName = fullName.toLocaleLowerCase();
+            namesViews.push(newNameObj);
         }
 
-        return namesViews.join("");
+        namesViews.sort(compareNames);
+
+        function compareNames(a,b){
+            if (a.sortName > b.sortName) return 1;
+            if (a.sortName < b.sortName) return -1;
+        }
+
+        for (var i=0; i < namesViews.length; i++) {
+            resultHtml += namesViews[i].view;
+        }
+
+        return resultHtml;
+        // return namesViews.join("");
     }
 
     function fillField(fieldName, value, type) {

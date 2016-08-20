@@ -37,9 +37,29 @@
     "gender": "male",
     "birthDate": "1992.01.05",
     "enterDate": "2010.08.01",
-    "subjects": ["First", "Second", "Third", "1234567890123456789012345", "5 Another", "6 Another", "7 ---==-"],
+    "subjects": ["First", "Second", "Third", "1234567890123456789012345", "5 Another", "6 Another"],
     "lessonsSkipped": 55,
     "lessonsSkippedFair": 12
+  },{
+    "firstName": "Илона",
+    "secondName": "Евгеньевна",
+    "lastName": "Лаварвина",
+    "gender": "female",
+    "birthDate": "1994.01.05",
+    "enterDate": "2011.08.01",
+    "subjects": ["1234567890123456789012345", "Another", "Another"],
+    "lessonsSkipped": 22,
+    "lessonsSkippedFair": 11
+  },{
+    "firstName": "Двитрий",
+    "secondName": "Александрович",
+    "lastName": "Миронов",
+    "gender": "male",
+    "birthDate": "1993.27.01",
+    "enterDate": "2010.08.01",
+    "subjects": ["Предмет", "Тоже предмет", "И еще предмет"],
+    "lessonsSkipped": 3,
+    "lessonsSkippedFair": 1
   },{
     "firstName": "Александр",
     "secondName": "Сергеевич",
