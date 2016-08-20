@@ -483,6 +483,10 @@ body {
   display: block;
   -webkit-mask-image: -webkit-gradient(linear, left top, right top, from(black), color-stop(35%, black), to(transparent)); }
 
+.name-list__name--deleted {
+  color: #707070;
+  text-decoration: line-through underline; }
+
 .name-list__name_current {
   float: left;
   width: 186px;
@@ -520,6 +524,22 @@ body {
   opacity: .99;
   color: black; }
 
+.data-container {
+  position: relative; }
+
+.blocking-area {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(253, 253, 253, 0.5);
+  display: block;
+  position: absolute;
+  z-index: 99; }
+
+.blocking-area--disabled {
+  display: none; }
+
 .person-data__title {
   font-size: 20px;
   /*font-weight: bold;*/
@@ -529,6 +549,9 @@ body {
 .person-data__link {
   position: absolute;
   right: 20px; }
+
+.person-data__link--deleted {
+  color: #c44741; }
 
 .kontur-hr {
   border: none;

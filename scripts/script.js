@@ -186,7 +186,44 @@
         addSubjectsView(studentData);
         drawDonutChart(studentData.lessonsSkipped,studentData.lessonsSkippedFair);
 
+        checkControlsState();
+
         checkSaveButtonState();
+
+        function checkControlsState(){
+            var saveButton = document.getElementById("save-student"),
+                deleteButton = document.getElementById("delete-student"),
+                blockingArea = document.querySelector(".blocking-area");
+
+            if (studentsArray[index]) {
+                showNormalStudentControls();
+            } else {
+                showDeletedStudentControls();
+            }
+
+            function showDeletedStudentControls(){
+                saveButton.textContent = "Восстановить запись";
+                saveButton.setAttribute("title", "Восстановить запись");
+
+                deleteButton.textContent = "Запись удалена";
+                deleteButton.classList.remove("link");
+                deleteButton.classList.add("person-data__link--deleted");
+
+                blockingArea.classList.remove("blocking-area--disabled");
+            }
+
+            function showNormalStudentControls(){
+                saveButton.textContent = "Сохранить изменения";
+                saveButton.setAttribute("title", "Сохранить изменения");
+
+                deleteButton.textContent = "Удалить";
+                deleteButton.classList.add("link");
+                deleteButton.classList.remove("person-data__link--deleted");
+
+                blockingArea.classList.add("blocking-area--disabled");
+            }
+        }
+
     }
 
     function addSubjectsView(studentData) {
@@ -263,6 +300,12 @@
 
             newNameView = insertProperty(newNameView,"fullName",fullName);
             newNameView = insertProperty(newNameView,"indexNumber",i);
+            if (!studentsArray[i]){ //if student is deleted
+                newNameView = insertProperty(newNameView,"additionalClass","name-list__name--deleted");
+            } else {
+                newNameView = insertProperty(newNameView,"additionalClass"," ");
+            }
+
             newNameObj = {};
             newNameObj.view = newNameView;
             newNameObj.sortName = fullName.toLocaleLowerCase();
@@ -468,7 +511,9 @@
     }
 
     function deleteStudent(){
-        studentsArray.splice(currentStudentIndex,1);
+        temporarySaveChanges();
+        studentsArray[currentStudentIndex] = null;
+        /*studentsArray.splice(currentStudentIndex,1);
         unsavedStudentsArray.splice(currentStudentIndex,1);
         currentStudentIndex--;
         if (currentStudentIndex < 0){
@@ -476,7 +521,8 @@
         }
         if (studentsArray.length == 0){
             addStudent();
-        }
+        }*/
+
         fillFormFields(currentStudentIndex);
     }
 
@@ -573,12 +619,15 @@
     }
 
     function checkSaveButtonState(){
-        //console.log("check")
         if (unsavedStudentsArray[currentStudentIndex]){
             document.getElementById("save-student").classList.remove("button-disabled");
-            document.querySelector(".link-reset-changes").style.marginTop = "-20px";
+            if (studentsArray[currentStudentIndex]){ //if student is not deleted
+                document.querySelector(".link-reset-changes").style.marginTop = "-20px"; //show reset-changes link
+            } else {
+                document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
+            }
         } else {
-            document.querySelector(".link-reset-changes").style.marginTop = "";
+            document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
             document.getElementById("save-student").classList.add("button-disabled");
         }
     }
