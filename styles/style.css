@@ -391,6 +391,7 @@ body {
   max-width: 980px; }
 
 .list-header__title {
+  transition: opacity 0.2s;
   font-size: 24px;
   display: inline-block;
   margin-bottom: 16px; }
@@ -473,10 +474,12 @@ body {
   float: left; }
 
 #name-list-container {
-  float: left; }
+  float: left;
+  position: relative; }
 
 .name-list__name {
-  transition: top .3s;
+  transition: opacity 0.2s;
+  transition: top .2s;
   position: relative;
   width: 190px;
   margin: 0;
@@ -529,7 +532,7 @@ body {
 
 #data-container {
   position: relative;
-  transition: all .2s; }
+  transition: opacity 0.2s; }
 
 .data-container--hidden {
   opacity: 0; }
@@ -855,7 +858,7 @@ body {
   display: inline-block;
   margin: 0;
   cursor: pointer;
-  transition: .2s; }
+  transition: width .2s; }
 
 /*end chart body */
 /*end Line chart */

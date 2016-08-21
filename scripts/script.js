@@ -124,10 +124,14 @@
 
     function animateTransition() {
         // document.querySelector("#data-container").classList.add("data-container--hidden");
-        var dataContainer = document.querySelector("#data-container");
+        var dataContainer = document.querySelector("#data-container"),
+            fullName = document.querySelector("#full-name"),
+            currentName = document.querySelector("#current-name");
 
         if (dataContainer.style.opacity != "") return;
         dataContainer.style.opacity = "0";
+        fullName.style.opacity = "0";
+        currentName.style.opacity = "0";
         dataContainer.addEventListener("transitionend",changeFields);
 
         function changeFields(){
@@ -135,6 +139,8 @@
             validateAllFields();
             // console.log("change");
             dataContainer.style.opacity = "";
+            fullName.style.opacity = "";
+            currentName.style.opacity = "";
             dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
@@ -300,44 +306,112 @@
     }
 
     function makeNameListView() {
-        var namesViews = [],
-            resultHtml = "";
 
-        for (var i=0; i < studentsArray.length; i++) {
-            if(i == currentStudentIndex) continue;
+        var listContainer = document.querySelector("#name-list-container");
+        if (listContainer.children.length == 0){
+            createNameList();
+            updateNameList();
+        } else {
+            updateNameList();
+        }
 
-            var studentData = unsavedStudentsArray[i] || studentsArray[i],
-                fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
-                newNameView = nameListNameHtml,
-                newNameObj;
+        function createNameList() {
+            var namesViews = [],
+                resultHtml = "";
 
-            newNameView = insertProperty(newNameView,"fullName",fullName);
-            newNameView = insertProperty(newNameView,"indexNumber",i);
-            if (!studentsArray[i]){ //if student is deleted
-                newNameView = insertProperty(newNameView,"additionalClass","name-list__name--deleted");
-            } else {
-                newNameView = insertProperty(newNameView,"additionalClass"," ");
+            for (var i = 0; i < studentsArray.length; i++) {
+                //if (i == currentStudentIndex) continue;
+
+                var studentData = unsavedStudentsArray[i] || studentsArray[i],
+                    fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName,
+                    newNameView = nameListNameHtml,
+                    newNameObj;
+
+                newNameView = insertProperty(newNameView, "fullName", fullName);
+                newNameView = insertProperty(newNameView, "indexNumber", i);
+
+                newNameObj = {};
+                newNameObj.view = newNameView;
+                newNameObj.sortName = fullName.toLocaleLowerCase();
+                namesViews.push(newNameObj);
             }
 
-            newNameObj = {};
-            newNameObj.view = newNameView;
-            newNameObj.sortName = fullName.toLocaleLowerCase();
-            namesViews.push(newNameObj);
+            /*namesViews.sort(compareNames);
+
+            function compareNames(a, b) {
+                if (a.sortName > b.sortName) return 1;
+                if (a.sortName < b.sortName) return -1;
+            }*/
+
+            for (var i = 0; i < namesViews.length; i++) {
+                resultHtml += namesViews[i].view;
+            }
+            insertHtml("name-list-container", resultHtml);
         }
 
-        namesViews.sort(compareNames);
+        function updateNameList(){
+            /*for (var i=0; i < listContainer.children.length; i++) {
+                currentChild = listContainer.children[i];
+                findPlace(currentChild);
+            }*/
 
-        function compareNames(a,b){
-            if (a.sortName > b.sortName) return 1;
-            if (a.sortName < b.sortName) return -1;
+            for (var i=0; i < listContainer.children.length; i++) {
+                var currentChild = listContainer.children[i];
+                var currentIndexNumber = currentChild.dataset.indexNumber,
+                    studentData = unsavedStudentsArray[currentIndexNumber] || studentsArray[currentIndexNumber],
+                    fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName;
+
+                currentChild.textContent = fullName;
+
+                checkCurrent();
+                checkDeleted();
+
+            }
+
+
+
+            function checkCurrent(){
+                if (currentIndexNumber == currentStudentIndex){
+                    currentChild.style.top = "-2em";
+                    currentChild.style.position = "absolute";
+                } else {
+                    currentChild.style.top = "0";
+                    currentChild.style.position = "";
+                }
+            }
+
+            function checkDeleted(){
+                if (!studentsArray[i]) { //if student is deleted
+                    currentChild.classList.add("name-list__name--deleted");
+                } else {
+                    currentChild.classList.remove("name-list__name--deleted");
+                }
+            }
+
+            function findPlace(elem){
+                var parent = elem.parentNode,
+                    siblings = parent.children,
+                    elemPosition = Array.prototype.indexOf.call(siblings,elem);
+
+                for (var i = 0; i < siblings.length; i++) {
+                    if (siblings[i] == elem) continue;
+                    if (compareNames(elem, siblings[i]) == 1){
+                        parent.insertBefore(elem,siblings[i]);
+                    }
+                    if (compareNames(elem, siblings[i]) == -1){
+                        parent.insertBefore(siblings[i],elem);
+                    }
+                }
+            }
+
+            function compareNames(a, b) {
+                var aField = a.textContent.toUpperCase(),
+                    bField = b.textContent.toUpperCase();
+                if (aField > bField) return 1;
+                if (aField < bField) return -1;
+                return 0;
+            }
         }
-
-        for (var i=0; i < namesViews.length; i++) {
-            resultHtml += namesViews[i].view;
-        }
-
-        insertHtml("name-list-container",resultHtml);
-        // return namesViews.join("");
     }
 
     function fillField(fieldName, value, type) {

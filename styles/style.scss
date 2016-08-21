@@ -5,6 +5,7 @@
 // 2016
 
 $sprites: url("../images/sprites.png");
+$transition-student-change: opacity .2s;
 
 @mixin button-gradient($color1,$color2) {
   background: $color1; /* Old browsers */
@@ -264,6 +265,7 @@ body {
 }
 
 .list-header__title {
+  transition: $transition-student-change;
   font-size: 24px;
   display: inline-block;
   margin-bottom: 16px;
@@ -363,10 +365,12 @@ body {
 
 #name-list-container{
   float: left;
+  position: relative;
 }
 
 .name-list__name {
-  transition: top .3s;
+  transition: $transition-student-change;
+  transition: top .2s;
   position: relative;
   width: 190px;
   margin: 0;
@@ -429,7 +433,7 @@ body {
 
 #data-container{
   position: relative;
-  transition: all .2s;
+  transition: $transition-student-change;
 }
 
 .data-container--hidden{
@@ -824,7 +828,7 @@ body {
   display: inline-block;
   margin: 0;
   cursor: pointer;
-  transition: .2s;
+  transition: width .2s;
 }
 
 /*end chart body */
