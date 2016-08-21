@@ -124,15 +124,17 @@
 
     function animateTransition() {
         // document.querySelector("#data-container").classList.add("data-container--hidden");
-        var dataContainer = document.querySelector("#data-container")
+        var dataContainer = document.querySelector("#data-container");
+
+        if (dataContainer.style.opacity != "") return;
         dataContainer.style.opacity = "0";
         dataContainer.addEventListener("transitionend",changeFields);
 
         function changeFields(){
             fillFormFields(currentStudentIndex);
             validateAllFields();
-            dataContainer.style.opacity = "1";
-            console.log("1");
+            // console.log("change");
+            dataContainer.style.opacity = "";
             dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
@@ -174,10 +176,9 @@
         var studentData = unsavedStudentsArray[index] || studentsArray[index],
             fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName,
             birthDateString = getDateString(studentData.birthDate),
-            enterDateString = getDateString(studentData.enterDate),
-            nameListView = makeNameListView();
+            enterDateString = getDateString(studentData.enterDate);
 
-        insertHtml("name-list-container",nameListView);
+        makeNameListView();
 
         fillField("full-name",fullName,"text");
         fillField("current-name",fullName,"text");
@@ -236,7 +237,6 @@
                 blockingArea.classList.add("blocking-area--disabled");
             }
         }
-
     }
 
     function addSubjectsView(studentData) {
@@ -336,7 +336,7 @@
             resultHtml += namesViews[i].view;
         }
 
-        return resultHtml;
+        insertHtml("name-list-container",resultHtml);
         // return namesViews.join("");
     }
 
