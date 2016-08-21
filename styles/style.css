@@ -472,8 +472,11 @@ body {
   margin-right: 0;
   float: left; }
 
+#name-list-container {
+  float: left; }
+
 .name-list__name {
-  float: left;
+  transition: top .3s;
   position: relative;
   width: 190px;
   margin: 0;
@@ -524,8 +527,12 @@ body {
   opacity: .99;
   color: black; }
 
-.data-container {
-  position: relative; }
+#data-container {
+  position: relative;
+  transition: all .2s; }
+
+.data-container--hidden {
+  opacity: 0; }
 
 .blocking-area {
   height: 100%;

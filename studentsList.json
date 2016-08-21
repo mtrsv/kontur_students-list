@@ -55,7 +55,7 @@
     "secondName": "Александрович",
     "lastName": "Миронов",
     "gender": "male",
-    "birthDate": "1993.27.01",
+    "birthDate": "1993.01.27",
     "enterDate": "2010.08.01",
     "subjects": ["Предмет", "Тоже предмет", "И еще предмет"],
     "lessonsSkipped": 3,

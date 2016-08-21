@@ -116,11 +116,24 @@
     }
 
     function onListContainerClick(event){
-        if (event.target.classList.contains("name-list__name")){
-            //temporarySaveChanges();
+        if (event.target.closest(".name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
+            animateTransition();
+        }
+    }
+
+    function animateTransition() {
+        // document.querySelector("#data-container").classList.add("data-container--hidden");
+        var dataContainer = document.querySelector("#data-container")
+        dataContainer.style.opacity = "0";
+        dataContainer.addEventListener("transitionend",changeFields);
+
+        function changeFields(){
             fillFormFields(currentStudentIndex);
             validateAllFields();
+            dataContainer.style.opacity = "1";
+            console.log("1");
+            dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
 
