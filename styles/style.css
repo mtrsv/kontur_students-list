@@ -53,6 +53,94 @@ html {
 *, *:before, *:after {
   box-sizing: inherit; }
 
+/**
+ * @package		PickMeUp - jQuery datepicker plugin
+ * @author		Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ * @author		Stefan Petre <www.eyecon.ro>
+ * @copyright	Copyright (c) 2013-2015, Nazar Mokrynskyi
+ * @copyright	Copyright (c) 2008-2009, Stefan Petre
+ * @license		MIT License, see license.txt
+ */
+.pickmeup {
+  background: #fff;
+  border-radius: 2px;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  display: none;
+  position: absolute;
+  border: 1px solid #aaaaaa; }
+  .pickmeup * {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  .pickmeup .pmu-instance {
+    display: inline-block;
+    height: 13.8em;
+    padding: .5em;
+    text-align: center;
+    width: 15em; }
+    .pickmeup .pmu-instance .pmu-button {
+      color: black;
+      cursor: pointer;
+      outline: none;
+      text-decoration: none; }
+    .pickmeup .pmu-instance .pmu-today {
+      background: #17384d;
+      color: #008be3; }
+    .pickmeup .pmu-instance .pmu-button:hover {
+      background: transparent;
+      color: #008be3; }
+    .pickmeup .pmu-instance .pmu-not-in-month {
+      color: #666; }
+    .pickmeup .pmu-instance .pmu-disabled,
+    .pickmeup .pmu-instance .pmu-disabled:hover {
+      color: #333;
+      cursor: default; }
+    .pickmeup .pmu-instance .pmu-selected {
+      background: #008be3;
+      color: #fff; }
+    .pickmeup .pmu-instance .pmu-not-in-month.pmu-selected {
+      background: #17384d; }
+    .pickmeup .pmu-instance nav {
+      color: black;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      line-height: 2em; }
+      .pickmeup .pmu-instance nav *:first-child :hover {
+        color: #008be3; }
+      .pickmeup .pmu-instance nav .pmu-prev,
+      .pickmeup .pmu-instance nav .pmu-next {
+        display: none;
+        height: 2em;
+        width: 1em; }
+      .pickmeup .pmu-instance nav .pmu-month {
+        width: 14em; }
+    .pickmeup .pmu-instance .pmu-years *,
+    .pickmeup .pmu-instance .pmu-months * {
+      display: inline-block;
+      line-height: 3.6em;
+      width: 3.5em; }
+    .pickmeup .pmu-instance .pmu-day-of-week {
+      color: #999;
+      cursor: default; }
+    .pickmeup .pmu-instance .pmu-day-of-week *,
+    .pickmeup .pmu-instance .pmu-days * {
+      display: inline-block;
+      line-height: 1.5em;
+      width: 2em; }
+    .pickmeup .pmu-instance .pmu-day-of-week * {
+      line-height: 1.8em; }
+  .pickmeup .pmu-instance:first-child .pmu-prev,
+  .pickmeup .pmu-instance:last-child .pmu-next {
+    display: block; }
+  .pickmeup .pmu-instance:first-child .pmu-month,
+  .pickmeup .pmu-instance:last-child .pmu-month {
+    width: 13em; }
+  .pickmeup .pmu-instance:first-child:last-child .pmu-month {
+    width: 12em; }
+  .pickmeup:not(.pmu-view-days) .pmu-days, .pickmeup:not(.pmu-view-days) .pmu-day-of-week, .pickmeup:not(.pmu-view-months) .pmu-months, .pickmeup:not(.pmu-view-years) .pmu-years {
+    display: none; }
+
 .main-container {
   box-sizing: border-box;
   font-family: 'PT Sans', sans-serif;
@@ -82,7 +170,8 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0);
   /* IE6-9 */ }
 
-.button.button_save {
+.button_save {
+  padding: 5px 5px 7px;
   position: relative;
   background: #009bfe;
   /* Old browsers */
@@ -98,16 +187,16 @@ html {
   text-shadow: none;
   margin-bottom: 25px; }
 
-.button.button_save::after {
+.button_save::after {
   position: absolute;
   content: attr(title);
-  padding: 8px 15px;
+  padding: 0 0 0 15px;
   color: rgba(255, 255, 255, 0.99);
-  top: -1px;
+  top: 6px;
   left: 9px;
   white-space: nowrap; }
 
-.button.button_save:before {
+.button_save:before {
   content: '';
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
@@ -121,10 +210,16 @@ html {
   height: 12px;
   display: inline-block; }
 
-.button.button_print {
+.link-reset-changes {
+  float: left;
+  margin-top: -45px;
+  padding-left: 25px;
+  transition: all .5s; }
+
+.button_print {
   width: 120px; }
 
-.button.button_print:before {
+.button_print:before {
   content: '';
   background-image: url("../images/sprites.png");
   background-repeat: no-repeat;
@@ -154,9 +249,15 @@ html {
   height: 12px;
   display: inline-block; }
 
-.button-disabled {
+.button.button-disabled {
+  background: none;
   background-color: lightgrey;
-  color: #404040; }
+  color: #707070;
+  outline: none;
+  border: 1px solid transparent; }
+
+.button.button-disabled:after {
+  content: ""; }
 
 /* radio button*/
 .radio {
@@ -290,6 +391,7 @@ body {
   max-width: 980px; }
 
 .list-header__title {
+  transition: opacity 0.2s;
   font-size: 24px;
   display: inline-block;
   margin-bottom: 16px; }
@@ -335,7 +437,6 @@ body {
   content: ""; }
 
 .page-header__print-button {
-  float: right;
   position: absolute;
   right: 20px; }
 
@@ -355,7 +456,10 @@ body {
   background: linear-gradient(to bottom, white 0%, #f1f1f1 50%, white 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
   padding: 16px;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2); }
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 55px;
+  transition: all .8s; }
 
 .name-list {
   width: 200px;
@@ -369,8 +473,13 @@ body {
   margin-right: 0;
   float: left; }
 
-.name-list__name {
+#name-list-container {
   float: left;
+  position: relative; }
+
+.name-list__name {
+  transition: opacity 0.2s;
+  transition: top .2s;
   position: relative;
   width: 190px;
   margin: 0;
@@ -379,6 +488,10 @@ body {
   white-space: nowrap;
   display: block;
   -webkit-mask-image: -webkit-gradient(linear, left top, right top, from(black), color-stop(35%, black), to(transparent)); }
+
+.name-list__name--deleted {
+  color: #707070;
+  text-decoration: line-through underline; }
 
 .name-list__name_current {
   float: left;
@@ -417,6 +530,26 @@ body {
   opacity: .99;
   color: black; }
 
+#data-container {
+  position: relative;
+  transition: opacity 0.2s; }
+
+.data-container--hidden {
+  opacity: 0; }
+
+.blocking-area {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(253, 253, 253, 0.5);
+  display: block;
+  position: absolute;
+  z-index: 99; }
+
+.blocking-area--disabled {
+  display: none; }
+
 .person-data__title {
   font-size: 20px;
   /*font-weight: bold;*/
@@ -426,6 +559,9 @@ body {
 .person-data__link {
   position: absolute;
   right: 20px; }
+
+.person-data__link--deleted {
+  color: #c44741; }
 
 .kontur-hr {
   border: none;
@@ -505,7 +641,7 @@ body {
   height: 15px;
   display: inline-block; }
 
-.button_calendar-active {
+.input_calendar:focus + .button_calendar {
   border: #5199DB solid 2px;
   border-radius: 3px;
   border-left: none;
@@ -722,7 +858,7 @@ body {
   display: inline-block;
   margin: 0;
   cursor: pointer;
-  transition: .2s; }
+  transition: width .2s; }
 
 /*end chart body */
 /*end Line chart */
@@ -732,92 +868,32 @@ body {
   text-align: center; }
 
 /*end donut chart*/
-/**
- * @package		PickMeUp - jQuery datepicker plugin
- * @author		Nazar Mokrynskyi <nazar@mokrynskyi.com>
- * @author		Stefan Petre <www.eyecon.ro>
- * @copyright	Copyright (c) 2013-2015, Nazar Mokrynskyi
- * @copyright	Copyright (c) 2008-2009, Stefan Petre
- * @license		MIT License, see license.txt
- */
+.error-container {
+  padding: 30px 0;
+  text-align: center;
+  line-height: 20px; }
+
 .pickmeup {
-  background: #fff;
-  border-radius: 2px;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  display: none;
-  position: absolute;
-  border: 1px solid #aaaaaa; }
-  .pickmeup * {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; }
-  .pickmeup .pmu-instance {
-    display: inline-block;
-    height: 13.8em;
-    padding: .5em;
-    text-align: center;
-    width: 15em; }
-    .pickmeup .pmu-instance .pmu-button {
-      color: black;
-      cursor: pointer;
-      outline: none;
-      text-decoration: none; }
-    .pickmeup .pmu-instance .pmu-today {
-      background: #17384d;
-      color: #008be3; }
-    .pickmeup .pmu-instance .pmu-button:hover {
-      background: transparent;
-      color: #008be3; }
-    .pickmeup .pmu-instance .pmu-not-in-month {
-      color: #666; }
-    .pickmeup .pmu-instance .pmu-disabled,
-    .pickmeup .pmu-instance .pmu-disabled:hover {
-      color: #333;
-      cursor: default; }
-    .pickmeup .pmu-instance .pmu-selected {
-      background: #008be3;
-      color: #fff; }
-    .pickmeup .pmu-instance .pmu-not-in-month.pmu-selected {
-      background: #17384d; }
-    .pickmeup .pmu-instance nav {
-      color: black;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      line-height: 2em; }
-      .pickmeup .pmu-instance nav *:first-child :hover {
-        color: #008be3; }
-      .pickmeup .pmu-instance nav .pmu-prev,
-      .pickmeup .pmu-instance nav .pmu-next {
-        display: none;
-        height: 2em;
-        width: 1em; }
-      .pickmeup .pmu-instance nav .pmu-month {
-        width: 14em; }
-    .pickmeup .pmu-instance .pmu-years *,
-    .pickmeup .pmu-instance .pmu-months * {
-      display: inline-block;
-      line-height: 3.6em;
-      width: 3.5em; }
-    .pickmeup .pmu-instance .pmu-day-of-week {
-      color: #999;
-      cursor: default; }
-    .pickmeup .pmu-instance .pmu-day-of-week *,
-    .pickmeup .pmu-instance .pmu-days * {
-      display: inline-block;
-      line-height: 1.5em;
-      width: 2em; }
-    .pickmeup .pmu-instance .pmu-day-of-week * {
-      line-height: 1.8em; }
-  .pickmeup .pmu-instance:first-child .pmu-prev,
-  .pickmeup .pmu-instance:last-child .pmu-next {
-    display: block; }
-  .pickmeup .pmu-instance:first-child .pmu-month,
-  .pickmeup .pmu-instance:last-child .pmu-month {
-    width: 13em; }
-  .pickmeup .pmu-instance:first-child:last-child .pmu-month {
-    width: 12em; }
-  .pickmeup:not(.pmu-view-days) .pmu-days, .pickmeup:not(.pmu-view-days) .pmu-day-of-week, .pickmeup:not(.pmu-view-months) .pmu-months, .pickmeup:not(.pmu-view-years) .pmu-years {
-    display: none; }
+  font-family: 'PT Sans', sans-serif; }
+
+@media print {
+  * {
+    visibility: hidden;
+    position: relative; }
+
+  body {
+    background: none; }
+
+  .toprint * {
+    visibility: visible; }
+
+  .toprint {
+    margin-top: -110px;
+    position: relative;
+    left: -100px;
+    top: 0; }
+
+  .link {
+    visibility: hidden; } }
 
 /*# sourceMappingURL=style.css.map */
