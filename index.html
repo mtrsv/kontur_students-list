@@ -31,8 +31,9 @@
         </div>
 
         <div class="name-list">
-            <button class="name-list__button button button_add">Добавить студента</button>
-            <button class="name-list__button button button_save button-disabled" title="Сохранить изменения">Сохранить изменения</button>
+            <button id="add-student" class="name-list__button button button_add">Добавить студента</button>
+            <button id="save-student" class="name-list__button button button_save button-disabled" title="Сохранить изменения">Сохранить изменения</button>
+            <span class="link link-reset-changes">Отменить изменения</span>
 
             <div class="name-list__name_current">
                 <span id="current-name" class="name-list__name" href="#">Константинопольский Константин Константинович</span>
@@ -43,8 +44,9 @@
             </div>
 
 
-            <article class="person-data">
+            <article class="person-data toprint">
                 <form id="data-container">
+                    <div class="blocking-area blocking-area--disabled"></div>
                     <span class="person-data__title">Стандартные личные данные</span>
                     <span id="delete-student" class="person-data__link link">Удалить</span>
 
@@ -66,10 +68,10 @@
                     <div class="form-item">
                         <span class="form-item__tittle">Пол</span>
 
-                        <input type="radio" class="radio form-item__input" id="radio-gender_male" name="radio_gender">
+                        <input type="radio" class="radio form-item__input" value="male" id="radio-gender_male" name="radio_gender">
                         <label for="radio-gender_male">Mужской</label>
 
-                        <input type="radio" class="radio form-item__input" id="radio-gender_female" name="radio_gender">
+                        <input type="radio" class="radio form-item__input" value="female" id="radio-gender_female" name="radio_gender">
                         <label for="radio-gender_female">Женский</label>
                     </div>
 
@@ -162,6 +164,14 @@
     <span class="subject-list__subject">
     <input type="checkbox" id="subject_{{subjectNumber}}" class="kontur-checkbox"  data-index-number="{{indexNumber}}" checked="checked">
     <label for="subject_{{subjectNumber}}">{{subjectName}}</label>
+</span>
+</script>
+<script type="text/template" id="template--error">
+    <div class="error-container">
+        <span>Не удалось получить данные.</span><br>
+        <a href="" onclick="reloadStudentsData">Повторить</a>
+    </div>
+
 </span>
 </script>
 </body>

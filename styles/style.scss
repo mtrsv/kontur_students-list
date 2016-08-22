@@ -1,9 +1,11 @@
 @import 'reset.scss';
+@import 'pickmeup';
 
 // Ilia Matrosov
 // 2016
 
 $sprites: url("../images/sprites.png");
+$transition-student-change: opacity .2s;
 
 @mixin button-gradient($color1,$color2) {
   background: $color1; /* Old browsers */
@@ -36,7 +38,8 @@ $sprites: url("../images/sprites.png");
   @include button-gradient(#fdfdfd, #dfdfdf);
 }
 
-.button.button_save {
+.button_save {
+  padding: 5px 5px 7px;
   position: relative;
   @include button-gradient(#009bfe, #007ecf);
   color: black;
@@ -44,17 +47,17 @@ $sprites: url("../images/sprites.png");
   margin-bottom: 25px;
 }
 
-.button.button_save::after {
+.button_save::after {
   position: absolute;
   content: attr(title);
-  padding: 8px 15px;
+  padding: 0 0 0 15px;
   color: rgba(255, 255, 255, .99);
-  top: -1px;
+  top: 6px;
   left: 9px;
   white-space: nowrap;
 }
 
-.button.button_save:before {
+.button_save:before {
   content: '';
   background-image: $sprites;
   background-repeat: no-repeat;
@@ -69,10 +72,18 @@ $sprites: url("../images/sprites.png");
   display: inline-block;
 }
 
-.button.button_print{
+.link-reset-changes{
+  float: left;
+  margin-top: -45px;
+  //margin-top: -20px;
+  padding-left: 25px;
+  transition: all .5s;
+}
+
+.button_print{
   width: 120px;
 }
-.button.button_print:before {
+.button_print:before {
   content: '';
   background-image: $sprites;
   background-repeat: no-repeat;
@@ -105,9 +116,15 @@ $sprites: url("../images/sprites.png");
   display: inline-block;
 }
 
-.button-disabled {
+.button.button-disabled {
+  background: none;
   background-color: lightgrey;
-  color: #404040;
+  color: #707070;
+  outline: none;
+  border: 1px solid transparent;
+}
+.button.button-disabled:after{
+  content:"";
 }
 
 /* radio button*/
@@ -248,6 +265,7 @@ body {
 }
 
 .list-header__title {
+  transition: $transition-student-change;
   font-size: 24px;
   display: inline-block;
   margin-bottom: 16px;
@@ -301,10 +319,8 @@ body {
 }
 
 .page-header__print-button {
-  float: right;
   position: absolute;
   right: 20px;
-
 }
 
 .group-list {
@@ -326,6 +342,10 @@ body {
 
   padding: 16px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+  height: 55px;
+  transition: all .8s;
 }
 
 .name-list {
@@ -343,8 +363,14 @@ body {
 
 }
 
-.name-list__name {
+#name-list-container{
   float: left;
+  position: relative;
+}
+
+.name-list__name {
+  transition: $transition-student-change;
+  transition: top .2s;
   position: relative;
   width: 190px;
   margin: 0;
@@ -356,6 +382,11 @@ body {
           from(rgba(0, 0, 0, 1)),
           color-stop(35%, rgba(0, 0, 0, 1)),
           to(transparent));
+}
+
+.name-list__name--deleted{
+  color: rgb(112, 112, 112);
+  text-decoration: line-through underline;
 }
 
 .name-list__name_current {
@@ -400,6 +431,28 @@ body {
   color: black;
 }
 
+#data-container{
+  position: relative;
+  transition: $transition-student-change;
+}
+
+.data-container--hidden{
+  opacity: 0;
+}
+
+.blocking-area{
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(253, 253, 253, .5);
+  display: block;
+  position: absolute;
+  z-index: 99;
+}
+.blocking-area--disabled{
+  display: none;
+}
 .person-data__title {
   font-size: 20px;
   /*font-weight: bold;*/
@@ -410,7 +463,9 @@ body {
 .person-data__link {
   position: absolute;
   right: 20px;
-
+}
+.person-data__link--deleted {
+  color: rgb(196, 71, 65);
 }
 
 .kontur-hr {
@@ -504,7 +559,7 @@ body {
   display: inline-block;
 }
 
-.button_calendar-active {
+.input_calendar:focus + .button_calendar {
   border: #5199DB solid 2px;
   border-radius: 3px;
   border-left: none;
@@ -773,7 +828,7 @@ body {
   display: inline-block;
   margin: 0;
   cursor: pointer;
-  transition: .2s;
+  transition: width .2s;
 }
 
 /*end chart body */
@@ -787,4 +842,44 @@ body {
 
 /*end donut chart*/
 
-@import 'pickmeup';
+.error-container{
+  padding: 30px 0;
+  text-align: center;
+  line-height: 20px;
+}
+
+.pickmeup{
+  font-family: 'PT Sans', sans-serif;
+
+}
+
+@media print{
+  *{
+    visibility: hidden;
+    position: relative;
+  }
+
+  body{
+    background: none;
+  }
+
+  .toprint * {
+    visibility: visible;
+  }
+
+  .toprint{
+    margin-top: -110px;
+    position: relative;
+    //top: -300px;
+    left: -100px;
+    top: 0;
+  }
+
+
+
+  .link{
+    visibility: hidden;
+
+  }
+
+}
