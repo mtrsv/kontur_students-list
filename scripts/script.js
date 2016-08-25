@@ -48,7 +48,6 @@
         addListeners();
         initPickmeup();
         showGroupList();
-
     }
 
     function addListeners(){
@@ -57,7 +56,7 @@
 
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
-        document.getElementById("data-container").addEventListener("change", temporarySaveChanges.bind(this),true);
+        document.getElementById("data-container").addEventListener("change", onDataChange,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
         document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
     }
@@ -94,6 +93,11 @@
         }
     }
 
+    function onDataChange(e){
+        if (e.target.closest(".subject-list")) return;
+        temporarySaveChanges();
+    }
+
     function initPickmeup(){
         $('.input_calendar').pickmeup({
             hide_on_select: true,
@@ -118,20 +122,21 @@
     function onListContainerClick(event){
         if (event.target.closest(".name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
+            makeNameListView();
             animateTransition();
+            // fillFormFields(currentStudentIndex); //temporary
+            // validateAllFields();//temporary
         }
     }
 
     function animateTransition() {
         // document.querySelector("#data-container").classList.add("data-container--hidden");
         var dataContainer = document.querySelector("#data-container"),
-            fullName = document.querySelector("#full-name"),
-            currentName = document.querySelector("#current-name");
+            fullName = document.querySelector("#full-name");
 
         if (dataContainer.style.opacity != "") return;
         dataContainer.style.opacity = "0";
         fullName.style.opacity = "0";
-        currentName.style.opacity = "0";
         dataContainer.addEventListener("transitionend",changeFields);
 
         function changeFields(){
@@ -140,7 +145,6 @@
             // console.log("change");
             dataContainer.style.opacity = "";
             fullName.style.opacity = "";
-            currentName.style.opacity = "";
             dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
@@ -306,7 +310,6 @@
     }
 
     function makeNameListView() {
-
         var listContainer = document.querySelector("#name-list-container");
         if (listContainer.children.length == 0){
             createNameList();
@@ -320,8 +323,6 @@
                 resultHtml = "";
 
             for (var i = 0; i < studentsArray.length; i++) {
-                //if (i == currentStudentIndex) continue;
-
                 var studentData = unsavedStudentsArray[i] || studentsArray[i],
                     fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName,
                     newNameView = nameListNameHtml,
@@ -372,11 +373,9 @@
 
             function checkCurrent(){
                 if (currentIndexNumber == currentStudentIndex){
-                    currentChild.style.top = "-2em";
-                    currentChild.style.position = "absolute";
+                    currentChild.classList.add("name-list__name_current");
                 } else {
-                    currentChild.style.top = "0";
-                    currentChild.style.position = "";
+                    currentChild.classList.remove("name-list__name_current");
                 }
             }
 
@@ -417,7 +416,7 @@
     function fillField(fieldName, value, type) {
         type = type||"input";
         var field = document.getElementById(fieldName);
-
+        if (!field) return;
         switch (type){
             case "input":
                 field.value = value;

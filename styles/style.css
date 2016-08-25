@@ -1,3 +1,5 @@
+/* Ilia Matrosov
+ 2016 */
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -198,9 +200,19 @@ html {
 
 .button_save:before {
   content: '';
-  background-image: url("../images/sprites.png");
-  background-repeat: no-repeat;
-  background-position: 0px -14px;
+  background: url("../images/sprites.png") no-repeat 0px -14px;
+  margin-right: 10px;
+  margin-left: -5px;
+  position: relative;
+  top: 0px;
+  left: 6px;
+  width: 14px;
+  height: 12px;
+  display: inline-block; }
+
+.button-disabled.button_save:before {
+  content: '';
+  background: url("../images/sprites.png") no-repeat -21px -28px;
   margin-right: 10px;
   margin-left: -5px;
   position: relative;
@@ -237,9 +249,7 @@ html {
 
 .button_add:before {
   content: '';
-  background-image: url("../images/sprites.png");
-  background-repeat: no-repeat;
-  background-position: -16px -16px;
+  background: url("../images/sprites.png") no-repeat -16px -16px;
   margin-right: 10px;
   margin-left: -2px;
   position: relative;
@@ -478,44 +488,55 @@ body {
   position: relative; }
 
 .name-list__name {
-  transition: opacity 0.2s;
-  transition: top .2s;
+  transition-property: margin, background-color, color, padding-top, padding-bottom, border;
+  transition-duration: 0.4s;
   position: relative;
   width: 190px;
-  margin: 0;
-  margin-bottom: 14px;
-  margin-left: 10px;
+  margin: 0 0 14px 10px;
   white-space: nowrap;
-  display: block;
-  -webkit-mask-image: -webkit-gradient(linear, left top, right top, from(black), color-stop(35%, black), to(transparent)); }
+  display: block; }
+
+.name-list__name:after {
+  background-image: url("../images/list-fade.png");
+  width: 88px;
+  height: 2em;
+  position: absolute;
+  right: 15px;
+  top: 0;
+  content: ""; }
 
 .name-list__name--deleted {
   color: #707070;
   text-decoration: line-through underline; }
 
 .name-list__name_current {
-  float: left;
   width: 186px;
-  border: 1px solid #d4d4d4;
-  border-right: 1px solid white;
+  border-top: 1px solid #d4d4d4;
+  /* separate definition needed for proper animation*/
+  border-left: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 8px 0px;
-  /*margin-left: -10px;*/
+  padding: 11px 0 9px 10px;
   z-index: 10;
+  left: -10px;
   background-color: white;
-  /*width: 240px;*/
-  display: inline-block;
+  display: block;
   position: relative;
-  margin-bottom: 12px; }
-
-.name-list__name_current .name-list__name {
-  margin-bottom: 0;
-  cursor: default; }
-
-.name-list__name_current a {
+  margin-bottom: 12px;
+  cursor: default;
   color: black;
-  text-decoration: none; }
+  text-decoration: none;
+  overflow: hidden; }
+
+.name-list__name_current:after {
+  background-image: url("../images/list-current-fade.png");
+  width: 88px;
+  height: 2em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  content: ""; }
 
 .person-data {
   width: 750px;
@@ -525,7 +546,6 @@ body {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
   padding: 30px 26px;
   position: relative;
-  /*z-index: 0;*/
   background: white;
   opacity: .99;
   color: black; }
