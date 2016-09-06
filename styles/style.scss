@@ -19,10 +19,10 @@ $transition-student-change: opacity $transition-time-student-change;
 @mixin fade--name-list($url, $right){
   background-image: url($url);
   width: 88px;
-  height: 2em;
+  height: 3em;
   position: absolute;
   right: $right;
-  top: 0;
+  top: -.5em;
   content: "";
 }
 
@@ -321,7 +321,7 @@ body {
   position: relative;
   color: #404040;
   cursor: pointer;
-
+  padding-right: 26px;
 }
 
 .page-header__group-name::after {
@@ -336,9 +336,11 @@ body {
   display: inline-block;
   position: absolute;
   top: 7px;
-  right: -26px;
+  right: 0;
   content: "";
 }
+
+
 
 .page-header__print-button {
   position: absolute;
@@ -390,9 +392,12 @@ body {
   position: relative;
 }
 
-//#name-list-container:after{
-//  @include fade--name-list("../images/list-fade.png", 15px);
-//}
+#name-list-container:after{
+  @include fade--name-list("../images/list-fade.png", 15px);
+  height: 100%;
+  top: .5em;
+  z-index: 0;
+}
 
 .name-list__name {
   //transition: all $transition-time-student-change;
@@ -409,6 +414,9 @@ body {
   margin: 0 0 14px 10px;
   white-space: nowrap;
   display: block;
+  border-color: transparent;
+  padding: 3px 0 1px;
+  z-index: 1;
   //-webkit-mask-image: -webkit-gradient(linear, left top, right top,
   //        from(rgba(0, 0, 0, 1)),
   //        color-stop(35%, rgba(0, 0, 0, 1)),
@@ -432,13 +440,13 @@ body {
   //border-right: 1px solid white;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 11px 0 9px 10px;
+  padding: 9px 0 7px 10px;
   z-index: 10;
   left: -10px;
   background-color: white;
   display: block;
   position: relative;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   cursor: default;
   color: black;
   text-decoration: none;
@@ -461,6 +469,7 @@ body {
   background: white;
   opacity: .99;
   color: black;
+  z-index: 2;
 }
 
 #data-container{
