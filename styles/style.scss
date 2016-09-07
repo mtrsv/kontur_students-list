@@ -1,11 +1,12 @@
+/* Ilia Matrosov
+ 2016 */
+
 @import 'reset.scss';
 @import 'pickmeup';
 
-// Ilia Matrosov
-// 2016
-
 $sprites: url("../images/sprites.png");
-$transition-student-change: opacity .2s;
+$transition-time-student-change: .2s;
+$transition-student-change: opacity $transition-time-student-change;
 
 @mixin button-gradient($color1,$color2) {
   background: $color1; /* Old browsers */
@@ -13,6 +14,16 @@ $transition-student-change: opacity .2s;
   background: -webkit-linear-gradient(top, $color1 0%, $color2 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, $color1 0%, $color2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2', GradientType=0); /* IE6-9 */
+}
+
+@mixin fade--name-list($url, $right){
+  background-image: url($url);
+  width: 88px;
+  height: 2.3em;
+  position: absolute;
+  right: $right;
+  top: -.1em;
+  content: "";
 }
 
 .main-container {
@@ -47,6 +58,7 @@ $transition-student-change: opacity .2s;
   margin-bottom: 25px;
 }
 
+
 .button_save::after {
   position: absolute;
   content: attr(title);
@@ -59,9 +71,7 @@ $transition-student-change: opacity .2s;
 
 .button_save:before {
   content: '';
-  background-image: $sprites;
-  background-repeat: no-repeat;
-  background-position: 0px -14px;
+  background: $sprites no-repeat 0px -14px;
   margin-right: 10px;
   margin-left: -5px;
   position: relative;
@@ -71,6 +81,20 @@ $transition-student-change: opacity .2s;
   height: 12px;
   display: inline-block;
 }
+.button-disabled.button_save:before {
+  content: '';
+  background: $sprites no-repeat -21px -28px;
+  margin-right: 10px;
+  margin-left: -5px;
+  position: relative;
+  top: 0px;
+  left: 6px;
+  width: 14px;
+  height: 12px;
+  display: inline-block;
+}
+
+
 
 .link-reset-changes{
   float: left;
@@ -103,9 +127,7 @@ $transition-student-change: opacity .2s;
 
 .button_add:before {
   content: '';
-  background-image: $sprites;
-  background-repeat: no-repeat;
-  background-position: -16px -16px;
+  background: $sprites no-repeat -16px -16px;
   margin-right: 10px;
   margin-left: -2px;
   position: relative;
@@ -299,7 +321,7 @@ body {
   position: relative;
   color: #404040;
   cursor: pointer;
-
+  padding-right: 26px;
 }
 
 .page-header__group-name::after {
@@ -314,9 +336,11 @@ body {
   display: inline-block;
   position: absolute;
   top: 7px;
-  right: -26px;
+  right: 0;
   content: "";
 }
+
+
 
 .page-header__print-button {
   position: absolute;
@@ -366,23 +390,73 @@ body {
 #name-list-container{
   float: left;
   position: relative;
+
+  background: url("../images/list-fade.png") right 0 repeat-y;
+
 }
 
+#name-list-container:before,
+#name-list-container:after{
+  @include fade--name-list("../images/list-fade-edge.png", 0px);
+  background-repeat: no-repeat;
+  width: 88px;
+  height: 10px;
+  top: -10px;
+}
+
+#name-list-container:after{
+  transform: scaleY(-1);
+  top: auto;
+  bottom: -10px;
+}
+
+/*#name-list-container:after{
+  @include fade--name-list("../images/list-fade.png", 15px);
+  height: 100%;
+  top: .5em;
+  z-index: 0;
+}*/
+
 .name-list__name {
-  transition: $transition-student-change;
-  transition: top .2s;
+  //transition: all $transition-time-student-change;
+  transition-property: /*padding $transition-time-student-change,*/
+              margin,
+              background-color,
+              color,
+              padding-top,
+              padding-bottom,
+              border;
+  transition-duration: $transition-time-student-change * 2;
   position: relative;
   width: 190px;
-  margin: 0;
-  margin-bottom: 14px;
-  margin-left: 10px;
+  margin: 0 0 14px 10px;
   white-space: nowrap;
   display: block;
-  -webkit-mask-image: -webkit-gradient(linear, left top, right top,
-          from(rgba(0, 0, 0, 1)),
-          color-stop(35%, rgba(0, 0, 0, 1)),
-          to(transparent));
+  border-color: transparent;
+  padding: 3px 0 1px;
+  z-index: 1;
+  //-webkit-mask-image: -webkit-gradient(linear, left top, right top,
+  //        from(rgba(0, 0, 0, 1)),
+  //        color-stop(35%, rgba(0, 0, 0, 1)),
+  //        to(transparent));
 }
+
+.name-list__name:after{
+  @include fade--name-list("../images/list-fade.png", 15px);
+}
+/*
+.name-list__name:first-child:before{
+  @include fade--name-list("../images/list-fade-edge.png", 15px);
+  top: -90%;
+}*/
+
+/*.name-list__name:last-child:after{
+  //@include fade--name-list("../images/list-fade-edge.png", 15px);
+}
+.name-list__name:first-child:after{
+  @include fade--name-list("../images/list-fade-edge.png", 15px);
+  height: 10px;
+}*/
 
 .name-list__name--deleted{
   color: rgb(112, 112, 112);
@@ -390,32 +464,30 @@ body {
 }
 
 .name-list__name_current {
-  float: left;
   width: 186px;
-  border: 1px solid #d4d4d4;
-  border-right: 1px solid white;
+  border-top: 1px solid rgb(212, 212, 212); /* separate definition needed for proper animation*/
+  border-left: 1px solid rgb(212, 212, 212);
+  border-bottom: 1px solid rgb(212, 212, 212);
+  //border-right: 1px solid white;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 8px 0px;
-  /*margin-left: -10px;*/
+  padding: 9px 0 7px 10px;
   z-index: 10;
+  left: -10px;
   background-color: white;
-  /*width: 240px;*/
-  display: inline-block;
+  display: block;
   position: relative;
-  margin-bottom: 12px;
-}
-
-.name-list__name_current .name-list__name {
-  margin-bottom: 0;
+  margin-bottom: 8px;
   cursor: default;
-
-}
-
-.name-list__name_current a {
   color: black;
   text-decoration: none;
+  overflow: hidden;
 }
+
+.name-list__name_current:after{
+  @include fade--name-list("../images/list-current-fade.png", 0);
+}
+
 
 .person-data {
   width: 750px;
@@ -425,10 +497,10 @@ body {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
   padding: 30px 26px;
   position: relative;
-  /*z-index: 0;*/
   background: white;
   opacity: .99;
   color: black;
+  z-index: 2;
 }
 
 #data-container{

@@ -51,14 +51,15 @@ function handleResponse(request,
 
     if (isJsonResponse) {
         try {
-            responseHandler(JSON.parse(request.responseText));
+            var parsedJson = JSON.parse(request.responseText);
+
         } catch(e){
             // console.log("Error");
             // console.dir(e);
-            responseHandler({
-                isError:true,
-                cause:e});
+            var parsedJson = { isError:true, cause:e };
         }
+
+        responseHandler(parsedJson);
 
     }
     else {
