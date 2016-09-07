@@ -486,20 +486,34 @@ body {
 
 #name-list-container {
   float: left;
-  position: relative; }
+  position: relative;
+  background: url("../images/list-fade.png") right 0 repeat-y; }
+
+#name-list-container:before,
+#name-list-container:after {
+  background-image: url("../images/list-fade-edge.png");
+  width: 88px;
+  height: 2.3em;
+  position: absolute;
+  right: 0px;
+  top: -.1em;
+  content: "";
+  background-repeat: no-repeat;
+  width: 88px;
+  height: 10px;
+  top: -10px; }
 
 #name-list-container:after {
-  background-image: url("../images/list-fade.png");
-  width: 88px;
-  height: 3em;
-  position: absolute;
-  right: 15px;
-  top: -.5em;
-  content: "";
+  transform: scaleY(-1);
+  top: auto;
+  bottom: -10px; }
+
+/*#name-list-container:after{
+  @include fade--name-list("../images/list-fade.png", 15px);
   height: 100%;
   top: .5em;
-  z-index: 0; }
-
+  z-index: 0;
+}*/
 .name-list__name {
   transition-property: margin, background-color, color, padding-top, padding-bottom, border;
   transition-duration: 0.4s;
@@ -515,12 +529,24 @@ body {
 .name-list__name:after {
   background-image: url("../images/list-fade.png");
   width: 88px;
-  height: 3em;
+  height: 2.3em;
   position: absolute;
   right: 15px;
-  top: -.5em;
+  top: -.1em;
   content: ""; }
 
+/*
+.name-list__name:first-child:before{
+  @include fade--name-list("../images/list-fade-edge.png", 15px);
+  top: -90%;
+}*/
+/*.name-list__name:last-child:after{
+  //@include fade--name-list("../images/list-fade-edge.png", 15px);
+}
+.name-list__name:first-child:after{
+  @include fade--name-list("../images/list-fade-edge.png", 15px);
+  height: 10px;
+}*/
 .name-list__name--deleted {
   color: #707070;
   text-decoration: line-through underline; }
@@ -548,10 +574,10 @@ body {
 .name-list__name_current:after {
   background-image: url("../images/list-current-fade.png");
   width: 88px;
-  height: 3em;
+  height: 2.3em;
   position: absolute;
   right: 0;
-  top: -.5em;
+  top: -.1em;
   content: ""; }
 
 .person-data {
