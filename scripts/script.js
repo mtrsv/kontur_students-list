@@ -351,16 +351,17 @@
         }
 
         function updateNameList(){
-            /*for (var i=0; i < listContainer.children.length; i++) {
-                currentChild = listContainer.children[i];
-                findPlace(currentChild);
-            }*/
+            var currentChild,
+                currentIndexNumber,
+                studentData,
+                fullName;
+
 
             for (var i=0; i < listContainer.children.length; i++) {
-                var currentChild = listContainer.children[i];
-                var currentIndexNumber = currentChild.dataset.indexNumber,
-                    studentData = unsavedStudentsArray[currentIndexNumber] || studentsArray[currentIndexNumber],
-                    fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName;
+                currentChild = listContainer.children[i];
+                currentIndexNumber = currentChild.dataset.indexNumber;
+                studentData = unsavedStudentsArray[currentIndexNumber] || studentsArray[currentIndexNumber];
+                fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName;
 
                 currentChild.textContent = fullName;
 
@@ -368,6 +369,8 @@
                 checkDeleted();
 
             }
+
+            sortList();
 
 
 
@@ -409,6 +412,32 @@
                 if (aField > bField) return 1;
                 if (aField < bField) return -1;
                 return 0;
+            }
+
+            function sortList(){
+                var unsortedElements = [];
+                var sortedElements = [];
+
+                for (var i=0; i < listContainer.children.length; i++) {
+                    currentChild = listContainer.children[i];
+                    currentChild.style.top = 0;
+                    unsortedElements.push(currentChild);
+                    sortedElements.push(currentChild);
+                    // findPlace(currentChild);
+                }
+
+                sortedElements.sort(compareNames);
+
+                for (i=0; i < unsortedElements.length; i++) {
+                    var elem = unsortedElements[i];
+                    // var distance = unsortedElements[i].style.;
+                    console.dir(elem.offsetTop);
+                    if (sortedElements.indexOf(elem) != i){
+                        var change = sortedElements.indexOf(elem) - i;
+                        elem.style.top = (change)  * 32 + "px";
+                    }
+                }
+
             }
         }
     }
