@@ -412,32 +412,25 @@ body {
 
 
 .name-list__name {
-  //transition: all $transition-time-student-change;
-  transition-property: /*padding $transition-time-student-change,*/
-              /*margin,*/
-              top,
+
+  transition-property:
               background-color,
-              color,
-              /*padding-top,
-              padding-bottom,*/
-              border;
+              border-left,
+              border-bottom,
+              border-top,
+              color;
   transition-duration: $transition-time-student-change * 2;
   position: relative;
-  width: 190px;
-  margin: 0 0 14px 10px;
+  width: 186px;
   white-space: nowrap;
   display: block;
-  border-color: transparent;
-  padding: 3px 0 1px;
+  border: 1px solid transparent;
+  padding: 9px 0 7px 13px;
   z-index: 1;
-  //-webkit-mask-image: -webkit-gradient(linear, left top, right top,
-  //        from(rgba(0, 0, 0, 1)),
-  //        color-stop(35%, rgba(0, 0, 0, 1)),
-  //        to(transparent));
 }
 
 .name-list__name:after{
-  @include fade--name-list("../images/list-fade.png", 15px);
+  @include fade--name-list("../images/list-fade.png", 0px);
 }
 
 
@@ -447,21 +440,12 @@ body {
 }
 
 .name-list__name_current {
-  width: 186px;
-  border-top: 1px solid rgb(212, 212, 212); /* separate definition needed for proper animation*/
-  border-left: 1px solid rgb(212, 212, 212);
-  border-bottom: 1px solid rgb(212, 212, 212);
-  //border-right: 1px solid white;
+  border: 1px solid rgb(212, 212, 212);
+  border-right: 1px solid white;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 9px 0 7px 9px;
   z-index: 10;
-  left: -10px;
   background-color: white;
-  display: block;
-  position: relative;
-  margin-bottom: 7px;
-  margin-top: -7px;
   cursor: default;
   color: black;
   text-decoration: none;
