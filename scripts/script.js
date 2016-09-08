@@ -351,16 +351,17 @@
         }
 
         function updateNameList(){
-            /*for (var i=0; i < listContainer.children.length; i++) {
-                currentChild = listContainer.children[i];
-                findPlace(currentChild);
-            }*/
+            var currentChild,
+                currentIndexNumber,
+                studentData,
+                fullName;
+
 
             for (var i=0; i < listContainer.children.length; i++) {
-                var currentChild = listContainer.children[i];
-                var currentIndexNumber = currentChild.dataset.indexNumber,
-                    studentData = unsavedStudentsArray[currentIndexNumber] || studentsArray[currentIndexNumber],
-                    fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName;
+                currentChild = listContainer.children[i];
+                currentIndexNumber = currentChild.dataset.indexNumber;
+                studentData = unsavedStudentsArray[currentIndexNumber] || studentsArray[currentIndexNumber];
+                fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName;
 
                 currentChild.textContent = fullName;
 
@@ -368,6 +369,8 @@
                 checkDeleted();
 
             }
+
+            sortList();
 
 
 
@@ -409,6 +412,52 @@
                 if (aField > bField) return 1;
                 if (aField < bField) return -1;
                 return 0;
+            }
+
+            function sortList(){
+                console.log("sort");
+                var unsortedElements = [];
+                var sortedElements = [];
+                var elem;
+                var rearrangeElementsBound = rearrangeElements.bind(this);
+
+                for (var i=0; i < listContainer.children.length; i++) {
+                    currentChild = listContainer.children[i];
+                    unsortedElements.push(currentChild);
+                    sortedElements.push(currentChild);
+                }
+
+                sortedElements.sort(compareNames);
+
+                for (i=0; i < unsortedElements.length; i++) {
+                    elem = unsortedElements[i];
+                    if (sortedElements.indexOf(elem) != i){
+                        var change = sortedElements.indexOf(elem) - i;
+                        elem.style.top = change * elem.offsetHeight + "px";
+
+                        //add listener only once
+                        if (i != 0) continue;
+                        console.log("add_gop");
+
+                        console.log(unsortedElements[0].parentElement);
+
+                        unsortedElements[0].parentElement.addEventListener("transitionend",rearrangeElementsBound);
+                    }
+
+
+
+                }
+
+                function rearrangeElements(e){
+                    console.log("gop");
+                    console.log(unsortedElements[0].parentElement);
+
+                    unsortedElements[0].parentElement.removeEventListener("transitionend",rearrangeElementsBound);
+                }
+
+
+
+                // console.error(new Error());
             }
         }
     }

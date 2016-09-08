@@ -508,64 +508,38 @@ body {
   top: auto;
   bottom: -10px; }
 
-/*#name-list-container:after{
-  @include fade--name-list("../images/list-fade.png", 15px);
-  height: 100%;
-  top: .5em;
-  z-index: 0;
-}*/
 .name-list__name {
-  transition-property: margin, background-color, color, padding-top, padding-bottom, border;
+  transition-property: background-color, border-left, border-bottom, border-top, top, color;
   transition-duration: 0.4s;
   position: relative;
-  width: 190px;
-  margin: 0 0 14px 10px;
+  width: 186px;
   white-space: nowrap;
   display: block;
-  border-color: transparent;
-  padding: 3px 0 1px;
-  z-index: 1; }
+  border: 1px solid transparent;
+  padding: 9px 0 7px 13px;
+  z-index: 1;
+  top: 0; }
 
 .name-list__name:after {
   background-image: url("../images/list-fade.png");
   width: 88px;
   height: 2.3em;
   position: absolute;
-  right: 15px;
+  right: 0px;
   top: -.1em;
   content: ""; }
 
-/*
-.name-list__name:first-child:before{
-  @include fade--name-list("../images/list-fade-edge.png", 15px);
-  top: -90%;
-}*/
-/*.name-list__name:last-child:after{
-  //@include fade--name-list("../images/list-fade-edge.png", 15px);
-}
-.name-list__name:first-child:after{
-  @include fade--name-list("../images/list-fade-edge.png", 15px);
-  height: 10px;
-}*/
 .name-list__name--deleted {
   color: #707070;
   text-decoration: line-through underline; }
 
 .name-list__name_current {
-  width: 186px;
-  border-top: 1px solid #d4d4d4;
-  /* separate definition needed for proper animation*/
-  border-left: 1px solid #d4d4d4;
-  border-bottom: 1px solid #d4d4d4;
+  border: 1px solid #d4d4d4;
+  border-right: 1px solid white;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 9px 0 7px 10px;
   z-index: 10;
-  left: -10px;
   background-color: white;
-  display: block;
-  position: relative;
-  margin-bottom: 8px;
   cursor: default;
   color: black;
   text-decoration: none;
@@ -711,130 +685,6 @@ body {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0; }
 
-.calendar-container {
-  position: relative;
-  display: inline-block; }
-
-.calendar {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  padding: 5px 10px;
-  display: inline-block;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
-  width: 18em;
-  height: 17em;
-  z-index: 99; }
-
-.calendar-row {
-  /*width: 100%;*/
-  display: block;
-  margin: 0;
-  margin-bottom: .2em;
-  text-align: center; }
-
-.calendar-column {
-  display: inline-block;
-  width: 33%;
-  box-sizing: border-box;
-  text-align: center; }
-
-.top-row {
-  margin-bottom: 0;
-  font-size: 0; }
-
-.calendar-cell {
-  vertical-align: top;
-  box-sizing: border-box;
-  display: inline-block;
-  /*border: 1px solid #bfbfbf;*/
-  /*border-radius: 2px;*/
-  text-align: center;
-  padding-top: .3em;
-  min-height: 2em;
-  min-width: 2em;
-  cursor: pointer;
-  border: 1px solid transparent; }
-
-.calendar-cell:hover {
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  background-color: #bfbfbf;
-  color: white; }
-
-.calendar-cell_current {
-  border: 1px solid #bfbfbf;
-  border-radius: 2px; }
-
-.calendar-cell_header {
-  border: none;
-  color: #bfbfbf; }
-
-.calendar-cell_header:hover {
-  border: none;
-  color: #bfbfbf;
-  background-color: white;
-  cursor: default; }
-
-.calendar-month-cell {
-  padding: 1em 0;
-  text-align: center;
-  width: 5em; }
-
-.calendar-year-cell {
-  padding: .3em;
-  box-sizing: border-box; }
-
-.calendar-button {
-  /*box-sizing: border-box;
-  display: inline-block;
-  border: 1px solid #bfbfbf;
-  text-align: center;
-  padding-top: .3em;
-  height: 2em;
-  min-width: 2em;*/
-  /*padding: .3em 1em;*/
-  display: inline-block;
-  margin: 0;
-  /*margin-bottom: .5em;*/
-  padding: .3em .5em;
-  border-radius: 0;
-  border-left: none;
-  border-right: none;
-  vertical-align: top;
-  font-size: 16px; }
-
-.calendar-button_rigth {
-  padding-left: .3em;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-right: 1px solid #bfbfbf; }
-
-.calendar-button_left {
-  padding-right: .3em;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  border-left: 1px solid #bfbfbf; }
-
-.calendar-input-text {
-  vertical-align: top;
-  padding: 0;
-  width: 5em;
-  text-align: center;
-  border-radius: 0;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #bfbfbf;
-  font-size: 16px;
-  margin-bottom: .4em; }
-
-.calendar-input-text_day {
-  width: 2em; }
-
-.calendar-input-text_year {
-  width: 3em; }
-
 /* end datepicker*/
 /*subject list*/
 .subject-list__subject {
@@ -937,7 +787,8 @@ body {
   line-height: 20px; }
 
 .pickmeup {
-  font-family: 'PT Sans', sans-serif; }
+  font-family: 'PT Sans', sans-serif;
+  z-index: 10; }
 
 @media print {
   * {
