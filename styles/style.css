@@ -509,7 +509,7 @@ body {
   bottom: -10px; }
 
 .name-list__name {
-  transition-property: background-color, border-left, border-bottom, border-top, color;
+  transition-property: background-color, border-left, border-bottom, border-top, top, color;
   transition-duration: 0.4s;
   position: relative;
   width: 186px;
@@ -517,7 +517,8 @@ body {
   display: block;
   border: 1px solid transparent;
   padding: 9px 0 7px 13px;
-  z-index: 1; }
+  z-index: 1;
+  top: 0; }
 
 .name-list__name:after {
   background-image: url("../images/list-fade.png");

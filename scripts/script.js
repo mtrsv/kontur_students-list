@@ -415,29 +415,49 @@
             }
 
             function sortList(){
+                console.log("sort");
                 var unsortedElements = [];
                 var sortedElements = [];
+                var elem;
+                var rearrangeElementsBound = rearrangeElements.bind(this);
 
                 for (var i=0; i < listContainer.children.length; i++) {
                     currentChild = listContainer.children[i];
-                    currentChild.style.top = 0;
                     unsortedElements.push(currentChild);
                     sortedElements.push(currentChild);
-                    // findPlace(currentChild);
                 }
 
                 sortedElements.sort(compareNames);
 
                 for (i=0; i < unsortedElements.length; i++) {
-                    var elem = unsortedElements[i];
-                    // var distance = unsortedElements[i].style.;
-                    console.dir(elem.offsetTop);
+                    elem = unsortedElements[i];
                     if (sortedElements.indexOf(elem) != i){
                         var change = sortedElements.indexOf(elem) - i;
-                        elem.style.top = (change)  * 32 + "px";
+                        elem.style.top = change * elem.offsetHeight + "px";
+
+                        //add listener only once
+                        if (i != 0) continue;
+                        console.log("add_gop");
+
+                        console.log(unsortedElements[0].parentElement);
+
+                        unsortedElements[0].parentElement.addEventListener("transitionend",rearrangeElementsBound);
                     }
+
+
+
                 }
 
+                function rearrangeElements(e){
+                    console.log("gop");
+                    console.log(unsortedElements[0].parentElement);
+
+                    unsortedElements[0].parentElement.removeEventListener("transitionend",rearrangeElementsBound);
+                }
+
+
+
+                // console.error(new Error());
             }
         }
     }
