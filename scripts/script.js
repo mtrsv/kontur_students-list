@@ -6,7 +6,9 @@
 
     document.addEventListener("DOMContentLoaded", onDomLoad);
     var VALIDATION_ERROR_MESSAGE = "Поле обязательно к заполнению",
-        STUDENT_LIST_URL = "studentsList.json";
+        STUDENT_LIST_URL = "studentsList.json",
+        NAME_RULE = new RegExp("[^A-Za-zА-Яа-яЁё]", "g");
+
 
     var barArray = [],
         radioArray =[],
@@ -48,6 +50,7 @@
         addListeners();
         initPickmeup();
         showGroupList();
+        makeNameListView();
     }
 
     function addListeners(){
@@ -57,6 +60,7 @@
         document.getElementById("data-container").addEventListener("blur", onListInputBlur,true);
         document.getElementById("data-container").addEventListener("focus", onListInputFocus,true);
         document.getElementById("data-container").addEventListener("change", onDataChange,true);
+        document.getElementById("data-container").addEventListener("input", onInputChange,true);
         document.getElementById("subject-list-container").addEventListener("change", onSubjectlistChange);
         document.getElementById("data-container").addEventListener("input", temporarySaveChanges.bind(this));
     }
@@ -94,8 +98,25 @@
     }
 
     function onDataChange(e){
+        //don't save if user changes subject diagram
         if (e.target.closest(".subject-list")) return;
         temporarySaveChanges();
+
+    }
+
+    function onInputChange(e){
+        //skip datepicker changes
+        if (e.target.closest(".input_calendar")) return;
+
+        if (e.target.closest(".form-item__input")) {
+            var studentData = unsavedStudentsArray[currentStudentIndex] || studentsArray[currentStudentIndex],
+                fullName = studentData.lastName + " " +  studentData.firstName + " " + studentData.secondName;
+
+            checkRules(e.target.closest(".form-item__input"));
+            temporarySaveChanges();
+            fillField("#full-name",fullName,"text");
+            fillField(".name-list__name_current",fullName,"text");
+        }
     }
 
     function initPickmeup(){
@@ -153,7 +174,7 @@
         var newStudent = getClone(studentTemplate);
         studentsArray.push(newStudent);
         currentStudentIndex = studentsArray.length - 1;
-        fillFormFields(currentStudentIndex);
+        addNameToNameList(currentStudentIndex);
         checkSaveButtonState();
     }
 
@@ -188,22 +209,20 @@
             birthDateString = getDateString(studentData.birthDate),
             enterDateString = getDateString(studentData.enterDate);
 
-        makeNameListView();
-
-        fillField("full-name",fullName,"text");
-        fillField("current-name",fullName,"text");
-        fillField("last-name",studentData.lastName);
-        fillField("first-name",studentData.firstName);
-        fillField("second-name",studentData.secondName);
-        fillField("birth-date",birthDateString);
-        fillField("enter-date",enterDateString);
+        fillField("#full-name",fullName,"text");
+        fillField(".name-list__name_current",fullName,"text");
+        fillField("#last-name",studentData.lastName);
+        fillField("#first-name",studentData.firstName);
+        fillField("#second-name",studentData.secondName);
+        fillField("#birth-date",birthDateString);
+        fillField("#enter-date",enterDateString);
 
         switch (studentData.gender){
             case "male":
-                fillField("radio-gender_male","checked","radio");
+                fillField("#radio-gender_male","checked","radio");
                 break;
             case "female":
-                fillField("radio-gender_female","checked","radio");
+                fillField("#radio-gender_female","checked","radio");
                 break;
         }
 
@@ -311,43 +330,21 @@
 
     function makeNameListView() {
         var listContainer = document.querySelector("#name-list-container");
-        if (listContainer.children.length == 0){
+
+        if (listContainer.children.length == 0) {
             createNameList();
-            updateNameList();
-        } else {
-            updateNameList();
         }
+        updateNameList();
 
         function createNameList() {
-            var namesViews = [],
-                resultHtml = "";
+            var resultHtml = "",
+                nameListContainer = document.querySelector("#name-list-container");
 
             for (var i = 0; i < studentsArray.length; i++) {
-                var studentData = unsavedStudentsArray[i] || studentsArray[i],
-                    fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName,
-                    newNameView = nameListNameHtml,
-                    newNameObj;
-
-                newNameView = insertProperty(newNameView, "fullName", fullName);
-                newNameView = insertProperty(newNameView, "indexNumber", i);
-
-                newNameObj = {};
-                newNameObj.view = newNameView;
-                newNameObj.sortName = fullName.toLocaleLowerCase();
-                namesViews.push(newNameObj);
+                resultHtml += createName(i);
             }
 
-            /*namesViews.sort(compareNames);
-
-            function compareNames(a, b) {
-                if (a.sortName > b.sortName) return 1;
-                if (a.sortName < b.sortName) return -1;
-            }*/
-
-            for (var i = 0; i < namesViews.length; i++) {
-                resultHtml += namesViews[i].view;
-            }
-            insertHtml("name-list-container", resultHtml);
+            nameListContainer.insertAdjacentHTML("beforeEnd", resultHtml);
         }
 
         function updateNameList(){
@@ -390,27 +387,15 @@
                 }
             }
 
-            function findPlace(elem){
-                var parent = elem.parentNode,
-                    siblings = parent.children,
-                    elemPosition = Array.prototype.indexOf.call(siblings,elem);
-
-                for (var i = 0; i < siblings.length; i++) {
-                    if (siblings[i] == elem) continue;
-                    if (compareNames(elem, siblings[i]) == 1){
-                        parent.insertBefore(elem,siblings[i]);
-                    }
-                    if (compareNames(elem, siblings[i]) == -1){
-                        parent.insertBefore(siblings[i],elem);
-                    }
-                }
-            }
-
             function compareNames(a, b) {
                 var aField = a.textContent.toUpperCase(),
-                    bField = b.textContent.toUpperCase();
+                    bField = b.textContent.toUpperCase(),
+                    aIndex = +a.dataset.indexNumber,
+                    bIndex = +b.dataset.indexNumber;
                 if (aField > bField) return 1;
                 if (aField < bField) return -1;
+                if (aIndex > bIndex) return 1;
+                if (aIndex < bIndex) return -1;
                 return 0;
             }
 
@@ -435,13 +420,7 @@
                         var change = sortedElements.indexOf(elem) - i;
                         elem.style.top = change * elem.offsetHeight + "px";
 
-                        //add listener only once
-                        if (i != 0) continue;
-                        console.log("add_gop");
-
-                        console.log(unsortedElements[0].parentElement);
-
-                        unsortedElements[0].parentElement.addEventListener("transitionend",rearrangeElementsBound);
+                        elem.parentElement.addEventListener("transitionend",rearrangeElementsBound);
                     }
 
 
@@ -449,10 +428,30 @@
                 }
 
                 function rearrangeElements(e){
-                    console.log("gop");
-                    console.log(unsortedElements[0].parentElement);
+                    var elem = sortedElements[0],
+                        parent = sortedElements[0].parentElement,
+                        nextElem,
+                        i;
 
-                    unsortedElements[0].parentElement.removeEventListener("transitionend",rearrangeElementsBound);
+                    elem.parentElement.removeEventListener("transitionend",rearrangeElementsBound);
+
+                    for (i = sortedElements.length-1; i >= 0 ; i--) {
+                        elem = sortedElements[i];
+                        if (!sortedElements[i+1]) continue;
+                        nextElem = sortedElements[i+1];
+                        parent.insertBefore(elem,nextElem);
+                        // console.log(elem, nextElem);
+                    }
+
+                    // disable transition to avoid unwanted animation
+                    sortedElements.forEach(function(e){e.style.transition = "none";});
+                    // move with no animation
+                    sortedElements.forEach(function(e){e.style.top = "";});
+                    // enable transition back
+                    setTimeout(function(){
+                        sortedElements.forEach(function(e){e.style.transition = "";});
+                    },50);
+
                 }
 
 
@@ -462,10 +461,28 @@
         }
     }
 
-    function fillField(fieldName, value, type) {
+    function createName(i){
+        var studentData = unsavedStudentsArray[i] || studentsArray[i],
+            fullName = studentData.lastName + " " + studentData.firstName + " " + studentData.secondName,
+            newNameView = nameListNameHtml;
+
+        newNameView = insertProperty(newNameView, "fullName", fullName);
+        newNameView = insertProperty(newNameView, "indexNumber", i);
+        return newNameView;
+    }
+
+    function addNameToNameList(i){
+        var nameListContainer = document.querySelector("#name-list-container");
+        nameListContainer.insertAdjacentHTML("beforeEnd", createName(i));
+        makeNameListView();
+        animateTransition();
+    }
+
+    function fillField(selector, value, type) {
         type = type||"input";
-        var field = document.getElementById(fieldName);
+        var field = document.querySelector(selector);
         if (!field) return;
+
         switch (type){
             case "input":
                 field.value = value;
@@ -477,8 +494,6 @@
                 field.checked = value;
                 break;
         }
-
-        // console.dir(field);
     }
 
     function insertHtml(id, html) {
@@ -745,12 +760,14 @@
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
+        makeNameListView();
     }
 
     function resetChanges(){
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
+        makeNameListView();
     }
 
     function checkSaveButtonState(){
@@ -784,7 +801,16 @@
         document.querySelector(".group-list").style.height = "auto";
     }
 
+    function checkRules(elem){
+        var text = elem.value,
+            cursorStart = elem.selectionStart,
+            cursorEnd = elem.selectionEnd;
 
+        elem.value = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+        // elem.value = text.replace(/[^A-Za-zА-Яа-яЁё]/g, "");
+        elem.value = elem.value.replace(NAME_RULE, "");
+        elem.setSelectionRange(cursorStart,cursorEnd);
+    }
 
     global.reloadStudentsData = onDomLoad;
 

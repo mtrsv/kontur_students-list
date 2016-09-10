@@ -518,7 +518,8 @@ body {
   border: 1px solid transparent;
   padding: 9px 0 7px 13px;
   z-index: 1;
-  top: 0; }
+  top: 0;
+  overflow: hidden; }
 
 .name-list__name:after {
   background-image: url("../images/list-fade.png");
