@@ -155,17 +155,16 @@
         var dataContainer = document.querySelector("#data-container"),
             fullName = document.querySelector("#full-name");
 
-        if (dataContainer.style.opacity != "") return;
-        dataContainer.style.opacity = "0";
-        fullName.style.opacity = "0";
+        if (dataContainer.classList.contains("zero-opacity")) return;
+        dataContainer.classList.add("zero-opacity");
+        fullName.classList.add("zero-opacity");
         dataContainer.addEventListener("transitionend",changeFields);
 
         function changeFields(){
             fillFormFields(currentStudentIndex);
             validateAllFields();
-            // console.log("change");
-            dataContainer.style.opacity = "";
-            fullName.style.opacity = "";
+            dataContainer.classList.remove("zero-opacity");
+            fullName.classList.remove("zero-opacity");
             dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
@@ -265,6 +264,24 @@
 
                 blockingArea.classList.add("blocking-area--disabled");
             }
+        }
+
+        function getDateString(dateString) {
+            var date,
+                dd,
+                mm,
+                yy;
+
+            dateString = dateString.replace(/\./gi, "-");
+            date = new Date(dateString);
+            dd = date.getDate();
+            mm = date.getMonth() + 1;
+            yy = date.getFullYear();
+
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+
+            return +dd + '.' + mm + '.' + yy;
         }
     }
 
@@ -400,7 +417,6 @@
             }
 
             function sortList(){
-                console.log("sort");
                 var unsortedElements = [];
                 var sortedElements = [];
                 var elem;
@@ -590,18 +606,6 @@
         context.fillText(lessonsSkippedFair, startPointX, startPointY + 80);
     }
 
-    function getDateString(dateString) {
-        var date = new Date(dateString),
-            dd = date.getDate(),
-            mm = date.getMonth() + 1,
-            yy = date.getFullYear();
-
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-
-        return dd + '.' + mm + '.' + yy;
-    }
-
     function validateField(target){
         if (target.value == ""){
             showError(target,VALIDATION_ERROR_MESSAGE);
@@ -773,18 +777,23 @@
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
         updateNameListView();
+        validateAllFields();
     }
 
     function checkSaveButtonState(){
         if (unsavedStudentsArray[currentStudentIndex]){
             document.getElementById("save-student").classList.remove("button-disabled");
-            if (studentsArray[currentStudentIndex]){ //if student is not deleted
-                document.querySelector(".link-reset-changes").style.marginTop = "-20px"; //show reset-changes link
+            //if student is not deleted
+            if (studentsArray[currentStudentIndex]){
+                //show reset-changes link
+                document.querySelector(".link-reset-changes").classList.remove("link-reset-changes--hidden");
             } else {
-                document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
+                //hide reset-changes link
+                document.querySelector(".link-reset-changes").classList.add("link-reset-changes--hidden");
             }
         } else {
-            document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
+            //hide reset-changes link
+            document.querySelector(".link-reset-changes").classList.add("link-reset-changes--hidden");
             document.getElementById("save-student").classList.add("button-disabled");
         }
     }
@@ -803,7 +812,7 @@
     }
 
     function showGroupList(){
-        document.querySelector(".group-list").style.height = "auto";
+        document.querySelector(".group-list").classList.remove("group-list--hidden");
     }
 
     function checkRules(elem){
