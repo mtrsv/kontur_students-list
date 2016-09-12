@@ -50,7 +50,7 @@
         addListeners();
         initPickmeup();
         showGroupList();
-        makeNameListView();
+        updateNameListView();
     }
 
     function addListeners(){
@@ -143,7 +143,7 @@
     function onListContainerClick(event){
         if (event.target.closest(".name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
-            makeNameListView();
+            updateNameListView();
             animateTransition();
             // fillFormFields(currentStudentIndex); //temporary
             // validateAllFields();//temporary
@@ -155,17 +155,16 @@
         var dataContainer = document.querySelector("#data-container"),
             fullName = document.querySelector("#full-name");
 
-        if (dataContainer.style.opacity != "") return;
-        dataContainer.style.opacity = "0";
-        fullName.style.opacity = "0";
+        if (dataContainer.classList.contains("zero-opacity")) return;
+        dataContainer.classList.add("zero-opacity");
+        fullName.classList.add("zero-opacity");
         dataContainer.addEventListener("transitionend",changeFields);
 
         function changeFields(){
             fillFormFields(currentStudentIndex);
             validateAllFields();
-            // console.log("change");
-            dataContainer.style.opacity = "";
-            fullName.style.opacity = "";
+            dataContainer.classList.remove("zero-opacity");
+            fullName.classList.remove("zero-opacity");
             dataContainer.removeEventListener("transitionend",changeFields);
         }
     }
@@ -266,6 +265,24 @@
                 blockingArea.classList.add("blocking-area--disabled");
             }
         }
+
+        function getDateString(dateString) {
+            var date,
+                dd,
+                mm,
+                yy;
+
+            dateString = dateString.replace(/\./gi, "-");
+            date = new Date(dateString);
+            dd = date.getDate();
+            mm = date.getMonth() + 1;
+            yy = date.getFullYear();
+
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+
+            return +dd + '.' + mm + '.' + yy;
+        }
     }
 
     function addSubjectsView(studentData) {
@@ -328,7 +345,7 @@
         return newBar;
     }
 
-    function makeNameListView() {
+    function updateNameListView() {
         var listContainer = document.querySelector("#name-list-container");
 
         if (listContainer.children.length == 0) {
@@ -400,7 +417,6 @@
             }
 
             function sortList(){
-                console.log("sort");
                 var unsortedElements = [];
                 var sortedElements = [];
                 var elem;
@@ -472,9 +488,14 @@
     }
 
     function addNameToNameList(i){
-        var nameListContainer = document.querySelector("#name-list-container");
+        var nameListContainer = document.querySelector("#name-list-container"),
+            lastNameElement;
         nameListContainer.insertAdjacentHTML("beforeEnd", createName(i));
-        makeNameListView();
+        lastNameElement = nameListContainer.children[nameListContainer.children.length - 1];
+        //new name fade in animation
+        lastNameElement.style.color = "transparent";
+        setTimeout(function(){lastNameElement.style.color = "";},50);
+        updateNameListView();
         animateTransition();
     }
 
@@ -583,18 +604,6 @@
 
         context.font = "24px sans-serif";
         context.fillText(lessonsSkippedFair, startPointX, startPointY + 80);
-    }
-
-    function getDateString(dateString) {
-        var date = new Date(dateString),
-            dd = date.getDate(),
-            mm = date.getMonth() + 1,
-            yy = date.getFullYear();
-
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-
-        return dd + '.' + mm + '.' + yy;
     }
 
     function validateField(target){
@@ -760,26 +769,31 @@
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
-        makeNameListView();
+        updateNameListView();
     }
 
     function resetChanges(){
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
-        makeNameListView();
+        updateNameListView();
+        validateAllFields();
     }
 
     function checkSaveButtonState(){
         if (unsavedStudentsArray[currentStudentIndex]){
             document.getElementById("save-student").classList.remove("button-disabled");
-            if (studentsArray[currentStudentIndex]){ //if student is not deleted
-                document.querySelector(".link-reset-changes").style.marginTop = "-20px"; //show reset-changes link
+            //if student is not deleted
+            if (studentsArray[currentStudentIndex]){
+                //show reset-changes link
+                document.querySelector(".link-reset-changes").classList.remove("link-reset-changes--hidden");
             } else {
-                document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
+                //hide reset-changes link
+                document.querySelector(".link-reset-changes").classList.add("link-reset-changes--hidden");
             }
         } else {
-            document.querySelector(".link-reset-changes").style.marginTop = ""; //hide reset-changes link
+            //hide reset-changes link
+            document.querySelector(".link-reset-changes").classList.add("link-reset-changes--hidden");
             document.getElementById("save-student").classList.add("button-disabled");
         }
     }
@@ -798,7 +812,7 @@
     }
 
     function showGroupList(){
-        document.querySelector(".group-list").style.height = "auto";
+        document.querySelector(".group-list").classList.remove("group-list--hidden");
     }
 
     function checkRules(elem){

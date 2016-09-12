@@ -23,7 +23,7 @@
         <button class="page-header__print-button button button_print">Распечатать</button>
     </header>
 
-    <div class="group-list">
+    <div class="group-list group-list--hidden">
 
         <div class="list-header">
             <a class="list-header__link link" href="#">Вернуться к списку групп</a>
@@ -33,11 +33,7 @@
         <div class="name-list">
             <button id="add-student" class="name-list__button button button_add">Добавить студента</button>
             <button id="save-student" class="name-list__button button button_save button-disabled" title="Сохранить изменения">Сохранить изменения</button>
-            <span class="link link-reset-changes">Отменить изменения</span>
-
-            <!--<div class="name-list__name_current">
-                <span id="current-name" class="name-list__name" href="#">Константинопольский Константин Константинович</span>
-            </div>-->
+            <span class="link link-reset-changes link-reset-changes--hidden">Отменить изменения</span>
 
             <div id="name-list-container">
                 <!--dynamically generated namelist here-->
@@ -168,16 +164,5 @@
 
 </span>
 </script>
-<svg>
-    <defs>
-        <linearGradient id="gradient" x1="100%" y1="0" x2 ="0" y2="0">
-            <stop stop-color="black" offset="0"/>
-            <stop stop-color="white" offset="1"/>
-        </linearGradient>
-        <mask id="masking" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-            <rect y="0.3" width="1" height=".7" fill="url(#gradient)" />
-        </mask>
-    </defs>
-</svg>
 </body>
 </html>

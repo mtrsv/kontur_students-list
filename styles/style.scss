@@ -98,10 +98,13 @@ $transition-student-change: opacity $transition-time-student-change;
 
 .link-reset-changes{
   float: left;
-  margin-top: -45px;
-  //margin-top: -20px;
+  margin-top: -20px;
   padding-left: 25px;
   transition: all .5s;
+}
+
+.link-reset-changes--hidden{
+  margin-top: -45px;
 }
 
 .button_print{
@@ -340,8 +343,6 @@ body {
   content: "";
 }
 
-
-
 .page-header__print-button {
   position: absolute;
   right: 20px;
@@ -368,8 +369,11 @@ body {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 
   overflow: hidden;
-  height: 55px;
   transition: all .8s;
+}
+
+.group-list--hidden{
+  height: 55px;
 }
 
 .name-list {
@@ -740,6 +744,10 @@ body {
   padding: 30px 0;
   text-align: center;
   line-height: 20px;
+}
+
+.zero-opacity{
+  opacity: 0;
 }
 
 .pickmeup{

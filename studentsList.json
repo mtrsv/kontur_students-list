@@ -7,8 +7,8 @@
     "birthDate": "2000.01.01",
     "enterDate": "2000.01.01",
     "subjects": ["First", "Second", "Third"],
-    "lessonsSkipped": 10,
-    "lessonsSkippedFair": 5
+    "lessonsSkipped": 0,
+    "lessonsSkippedFair": 0
   },
   "students": [{
     "firstName": "Иван",
