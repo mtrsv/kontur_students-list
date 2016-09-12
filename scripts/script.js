@@ -50,7 +50,7 @@
         addListeners();
         initPickmeup();
         showGroupList();
-        makeNameListView();
+        updateNameListView();
     }
 
     function addListeners(){
@@ -143,7 +143,7 @@
     function onListContainerClick(event){
         if (event.target.closest(".name-list__name")){
             currentStudentIndex = event.target.dataset.indexNumber;
-            makeNameListView();
+            updateNameListView();
             animateTransition();
             // fillFormFields(currentStudentIndex); //temporary
             // validateAllFields();//temporary
@@ -328,7 +328,7 @@
         return newBar;
     }
 
-    function makeNameListView() {
+    function updateNameListView() {
         var listContainer = document.querySelector("#name-list-container");
 
         if (listContainer.children.length == 0) {
@@ -472,9 +472,14 @@
     }
 
     function addNameToNameList(i){
-        var nameListContainer = document.querySelector("#name-list-container");
+        var nameListContainer = document.querySelector("#name-list-container"),
+            lastNameElement;
         nameListContainer.insertAdjacentHTML("beforeEnd", createName(i));
-        makeNameListView();
+        lastNameElement = nameListContainer.children[nameListContainer.children.length - 1];
+        //new name fade in animation
+        lastNameElement.style.color = "transparent";
+        setTimeout(function(){lastNameElement.style.color = "";},50);
+        updateNameListView();
         animateTransition();
     }
 
@@ -760,14 +765,14 @@
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
-        makeNameListView();
+        updateNameListView();
     }
 
     function resetChanges(){
         unsavedStudentsArray[currentStudentIndex] = null;
         checkSaveButtonState();
         fillFormFields(currentStudentIndex);
-        makeNameListView();
+        updateNameListView();
     }
 
     function checkSaveButtonState(){
