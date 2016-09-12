@@ -23,7 +23,7 @@
         <button class="page-header__print-button button button_print">Распечатать</button>
     </header>
 
-    <div class="group-list">
+    <div class="group-list group-list--hidden">
 
         <div class="list-header">
             <a class="list-header__link link" href="#">Вернуться к списку групп</a>
@@ -33,11 +33,7 @@
         <div class="name-list">
             <button id="add-student" class="name-list__button button button_add">Добавить студента</button>
             <button id="save-student" class="name-list__button button button_save button-disabled" title="Сохранить изменения">Сохранить изменения</button>
-            <span class="link link-reset-changes">Отменить изменения</span>
-
-            <div class="name-list__name_current">
-                <span id="current-name" class="name-list__name" href="#">Константинопольский Константин Константинович</span>
-            </div>
+            <span class="link link-reset-changes link-reset-changes--hidden">Отменить изменения</span>
 
             <div id="name-list-container">
                 <!--dynamically generated namelist here-->
@@ -89,12 +85,6 @@
                             <input id="enter-date" class="form-item__input input_calendar" type="text" size="40">
                            <div class="button button_calendar"></div>
                         </span>
-
-                        <div class="calendar-container">
-
-                        </div>
-
-
                     </div>
 
                     <hr class="kontur-hr person-data__hr">
